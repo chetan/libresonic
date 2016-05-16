@@ -30,8 +30,10 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.ParameterizableViewController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +52,9 @@ import java.util.Map;
  *
  * @author Sindre Mehus
  */
-public class AvatarUploadController extends ParameterizableViewController {
+@Controller
+@RequestMapping("avatarUpload")
+public class AvatarUploadController {
 
     private static final Logger LOG = Logger.getLogger(AvatarUploadController.class);
     private static final int MAX_AVATAR_SIZE = 64;
@@ -58,8 +62,8 @@ public class AvatarUploadController extends ParameterizableViewController {
     private SettingsService settingsService;
     private SecurityService securityService;
 
-    @Override
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.POST)
+    protected String doGet(ModelMap model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         String username = securityService.getCurrentUsername(request);
 
@@ -93,9 +97,8 @@ public class AvatarUploadController extends ParameterizableViewController {
 
         map.put("username", username);
         map.put("avatar", settingsService.getCustomAvatar(username));
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("model", map);
-        return result;
+        model.put("model", map);
+        return "avatarUploadResult";
     }
 
     private void createAvatar(String fileName, byte[] data, String username, Map<String, Object> map) throws IOException {

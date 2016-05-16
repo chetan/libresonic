@@ -19,21 +19,26 @@
  */
 package org.libresonic.player.controller;
 
-import org.springframework.web.servlet.*;
-import org.springframework.web.servlet.mvc.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Controller for the page which forwards to allmusic.com.
  *
  * @author Sindre Mehus
  */
-public class AllmusicController extends ParameterizableViewController {
+@Controller
+@RequestMapping("allmusic")
+public class AllmusicController {
 
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("album", request.getParameter("album"));
-        return result;
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(ModelMap model, HttpServletRequest request) {
+        model.addAttribute("album", request.getParameter("album"));
+        return "allmusic";
     }
+
 }

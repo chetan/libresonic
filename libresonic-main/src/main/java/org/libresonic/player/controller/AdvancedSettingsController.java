@@ -21,22 +21,26 @@ package org.libresonic.player.controller;
 
 import org.libresonic.player.command.AdvancedSettingsCommand;
 import org.libresonic.player.service.SettingsService;
-import org.springframework.web.servlet.mvc.SimpleFormController;
 import org.apache.commons.lang.StringUtils;
-
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller for the page used to administrate advanced settings.
  *
  * @author Sindre Mehus
  */
-public class AdvancedSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("advancedSettings")
+public class AdvancedSettingsController {
 
     private SettingsService settingsService;
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    protected String formBackingObject(ModelMap model) throws Exception {
         AdvancedSettingsCommand command = new AdvancedSettingsCommand();
         command.setDownloadLimit(String.valueOf(settingsService.getDownloadBitrateLimit()));
         command.setUploadLimit(String.valueOf(settingsService.getUploadBitrateLimit()));
@@ -52,12 +56,14 @@ public class AdvancedSettingsController extends SimpleFormController {
         command.setSmtpPort(settingsService.getSmtpPort());
         command.setSmtpUser(settingsService.getSmtpUser());
 
-        return command;
+        model.addAttribute("advancedsettings", command);
+
+        return "redirect:advancedSettings";
     }
 
-    @Override
-    protected void doSubmitAction(Object comm) throws Exception {
-        AdvancedSettingsCommand command = (AdvancedSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected String doSubmitAction(@ModelAttribute("command") AdvancedSettingsCommand command) throws
+            Exception {
 
         command.setToast(true);
         command.setReloadNeeded(false);
@@ -89,6 +95,8 @@ public class AdvancedSettingsController extends SimpleFormController {
         }
 
         settingsService.save();
+
+        return "advancedSettings";
     }
 
     public void setSettingsService(SettingsService settingsService) {

@@ -4,6 +4,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+    <!--TODO:AD component scan the controller package -->
     <bean id="leftController" class="org.libresonic.player.controller.LeftController">
         <property name="viewName" value="left"/>
         <property name="mediaScannerService" ref="mediaScannerService"/>
@@ -76,7 +77,6 @@
         <property name="viewName" value="lyrics"/>
     </bean>
     <bean id="allmusicController" class="org.libresonic.player.controller.AllmusicController">
-        <property name="viewName" value="allmusic"/>
     </bean>
     <bean id="podcastController" class="org.libresonic.player.controller.PodcastController">
         <property name="viewName" value="podcast"/>
@@ -134,7 +134,6 @@
         </property>
     </bean>
     <bean id="changeCoverArtController" class="org.libresonic.player.controller.ChangeCoverArtController">
-        <property name="viewName" value="changeCoverArt"/>
         <property name="mediaFileService" ref="mediaFileService"/>
     </bean>
     <bean id="nowPlayingController" class="org.libresonic.player.controller.NowPlayingController">
@@ -171,7 +170,6 @@
         <property name="transcodingService" ref="transcodingService"/>
     </bean>
     <bean id="dlnaSettingsController" class="org.libresonic.player.controller.DLNASettingsController">
-        <property name="viewName" value="dlnaSettings"/>
         <property name="upnpService" ref="upnpService"/>
         <property name="settingsService" ref="settingsService"/>
     </bean>
@@ -222,35 +220,20 @@
         <property name="podcastService" ref="podcastService"/>
     </bean>
     <bean id="generalSettingsController" class="org.libresonic.player.controller.GeneralSettingsController">
-        <property name="commandClass" value="org.libresonic.player.command.GeneralSettingsCommand"/>
-        <property name="successView" value="generalSettings"/>
-        <property name="formView" value="generalSettings"/>
         <property name="settingsService" ref="settingsService"/>
     </bean>
     <bean id="advancedSettingsController" class="org.libresonic.player.controller.AdvancedSettingsController">
-        <property name="commandClass" value="org.libresonic.player.command.AdvancedSettingsCommand"/>
-        <property name="successView" value="advancedSettings"/>
-        <property name="formView" value="advancedSettings"/>
         <property name="settingsService" ref="settingsService"/>
     </bean>
     <bean id="personalSettingsController" class="org.libresonic.player.controller.PersonalSettingsController">
-        <property name="commandClass" value="org.libresonic.player.command.PersonalSettingsCommand"/>
-        <property name="successView" value="personalSettings"/>
-        <property name="formView" value="personalSettings"/>
         <property name="settingsService" ref="settingsService"/>
         <property name="securityService" ref="securityService"/>
     </bean>
     <bean id="avatarUploadController" class="org.libresonic.player.controller.AvatarUploadController">
-        <property name="viewName" value="avatarUploadResult"/>
         <property name="settingsService" ref="settingsService"/>
         <property name="securityService" ref="securityService"/>
     </bean>
     <bean id="userSettingsController" class="org.libresonic.player.controller.UserSettingsController">
-        <property name="sessionForm" value="true"/>
-        <property name="commandClass" value="org.libresonic.player.command.UserSettingsCommand"/>
-        <property name="validator" ref="userSettingsValidator"/>
-        <property name="successView" value="userSettings"/>
-        <property name="formView" value="userSettings"/>
         <property name="securityService" ref="securityService"/>
         <property name="settingsService" ref="settingsService"/>
         <property name="transcodingService" ref="transcodingService"/>
@@ -273,7 +256,6 @@
         <property name="securityService" ref="securityService"/>
     </bean>
     <bean id="editTagsController" class="org.libresonic.player.controller.EditTagsController">
-        <property name="viewName" value="editTags"/>
         <property name="mediaFileService" ref="mediaFileService"/>
         <property name="metaDataParserFactory" ref="metaDataParserFactory"/>
     </bean>
@@ -331,7 +313,6 @@
         <property name="securityService" ref="securityService"/>
     </bean>
     <bean id="externalPlayerController" class="org.libresonic.player.controller.ExternalPlayerController">
-        <property name="viewName" value="externalPlayer"/>
         <property name="mediaFileService" ref="mediaFileService"/>
         <property name="settingsService" ref="settingsService"/>
         <property name="playerService" ref="playerService"/>
@@ -400,7 +381,6 @@
         <property name="leftController" ref="leftController"/>
     </bean>
     <bean id="dbController" class="org.libresonic.player.controller.DBController">
-        <property name="viewName" value="db"/>
         <property name="daoHelper" ref="daoHelper"/>
     </bean>
     <bean id="premiumSettingsValidator" class="org.libresonic.player.validator.PremiumSettingsValidator">
@@ -412,6 +392,7 @@
     </bean>
     <bean id="passwordSettingsValidator" class="org.libresonic.player.validator.PasswordSettingsValidator"/>
 
+    <!--TODO:AD remove this-->
     <bean id="urlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="alwaysUseFullPath" value="true"/>
         <property name="mappings">

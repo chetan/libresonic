@@ -28,7 +28,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -43,12 +47,15 @@ import org.libresonic.player.service.metadata.MetaDataParserFactory;
  *
  * @author Sindre Mehus
  */
-public class EditTagsController extends ParameterizableViewController {
+@Controller
+@RequestMapping("editTags")
+public class EditTagsController {
 
     private MetaDataParserFactory metaDataParserFactory;
     private MediaFileService mediaFileService;
 
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(HttpServletRequest request, ModelMap model) throws Exception {
 
         int id = ServletRequestUtils.getRequiredIntParameter(request, "id");
         MediaFile dir = mediaFileService.getMediaFile(id);
@@ -70,9 +77,8 @@ public class EditTagsController extends ParameterizableViewController {
         map.put("id", id);
         map.put("songs", songs);
 
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("model", map);
-        return result;
+        model.put("model", map);
+        return "editTags";
     }
 
     private Song createSong(MediaFile file, int index) {

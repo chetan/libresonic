@@ -19,62 +19,42 @@
  */
 package org.libresonic.player.controller;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GradientPaint;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.libresonic.player.Logger;
+import org.libresonic.player.dao.AlbumDao;
+import org.libresonic.player.dao.ArtistDao;
+import org.libresonic.player.domain.*;
+import org.libresonic.player.service.*;
+import org.libresonic.player.service.metadata.JaudiotaggerParser;
+import org.libresonic.player.util.StringUtil;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.LastModified;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.mvc.LastModified;
-
-import org.libresonic.player.Logger;
-import org.libresonic.player.dao.AlbumDao;
-import org.libresonic.player.dao.ArtistDao;
-import org.libresonic.player.domain.Album;
-import org.libresonic.player.domain.Artist;
-import org.libresonic.player.domain.CoverArtScheme;
-import org.libresonic.player.domain.MediaFile;
-import org.libresonic.player.domain.Playlist;
-import org.libresonic.player.domain.PodcastChannel;
-import org.libresonic.player.domain.Transcoding;
-import org.libresonic.player.domain.VideoTranscodingSettings;
-import org.libresonic.player.service.MediaFileService;
-import org.libresonic.player.service.PlaylistService;
-import org.libresonic.player.service.PodcastService;
-import org.libresonic.player.service.SettingsService;
-import org.libresonic.player.service.TranscodingService;
-import org.libresonic.player.service.metadata.JaudiotaggerParser;
-import org.libresonic.player.util.StringUtil;
-
 /**
  * Controller which produces cover art images.
  *
  * @author Sindre Mehus
  */
-public class CoverArtController implements Controller, LastModified {
+@Controller
+@RequestMapping("coverArt")
+public class CoverArtController implements LastModified {
 
     public static final String ALBUM_COVERART_PREFIX = "al-";
     public static final String ARTIST_COVERART_PREFIX = "ar-";
@@ -96,6 +76,7 @@ public class CoverArtController implements Controller, LastModified {
         semaphore = new Semaphore(settingsService.getCoverArtConcurrency());
     }
 
+    @Override
     public long getLastModified(HttpServletRequest request) {
         CoverArtRequest coverArtRequest = createCoverArtRequest(request);
         long result = coverArtRequest.lastModified();
@@ -103,7 +84,8 @@ public class CoverArtController implements Controller, LastModified {
         return result;
     }
 
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         CoverArtRequest coverArtRequest = createCoverArtRequest(request);
 //        LOG.info("handleRequest - " + coverArtRequest);

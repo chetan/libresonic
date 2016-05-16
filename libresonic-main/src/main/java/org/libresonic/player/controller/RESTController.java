@@ -1376,7 +1376,7 @@ public class RESTController extends MultiActionController {
         return null;
     }
 
-    public ModelAndView download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String download(HttpServletRequest request, HttpServletResponse response) throws Exception {
         request = wrapRequest(request);
         User user = securityService.getCurrentUser(request);
         if (!user.isDownloadRole()) {
@@ -1996,7 +1996,7 @@ public class RESTController extends MultiActionController {
     }
 
     @SuppressWarnings("UnusedDeclaration")
-    public ModelAndView getCoverArt(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public String getCoverArt(HttpServletRequest request, HttpServletResponse response) throws Exception {
         request = wrapRequest(request);
         return coverArtController.handleRequest(request, response);
     }

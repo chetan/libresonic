@@ -23,6 +23,11 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
 import org.libresonic.player.command.GeneralSettingsCommand;
@@ -34,11 +39,14 @@ import org.libresonic.player.service.SettingsService;
  *
  * @author Sindre Mehus
  */
-public class GeneralSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("generalSettings")
+public class GeneralSettingsController {
 
     private SettingsService settingsService;
 
-    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String formBackingObject(ModelMap model) throws Exception {
         GeneralSettingsCommand command = new GeneralSettingsCommand();
         command.setCoverArtFileTypes(settingsService.getCoverArtFileTypes());
         command.setIgnoredArticles(settingsService.getIgnoredArticles());
@@ -76,12 +84,13 @@ public class GeneralSettingsController extends SimpleFormController {
         }
         command.setLocales(localeStrings);
 
-        return command;
+        model.put("generalsettings", command);
 
+        return "generalSettings";
     }
 
-    protected void doSubmitAction(Object comm) throws Exception {
-        GeneralSettingsCommand command = (GeneralSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    public String doSubmitAction(@ModelAttribute("commadn") GeneralSettingsCommand command) throws Exception {
 
         int themeIndex = Integer.parseInt(command.getThemeIndex());
         Theme theme = settingsService.getAvailableThemes()[themeIndex];
@@ -112,6 +121,7 @@ public class GeneralSettingsController extends SimpleFormController {
         settingsService.setThemeId(theme.getId());
         settingsService.setLocale(locale);
         settingsService.save();
+        return "generalSettings";
     }
 
     public void setSettingsService(SettingsService settingsService) {

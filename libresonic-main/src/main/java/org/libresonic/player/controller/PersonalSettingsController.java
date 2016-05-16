@@ -25,7 +25,7 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.stereotype.Controller;
 
 import org.libresonic.player.command.PersonalSettingsCommand;
 import org.libresonic.player.domain.AlbumListType;
@@ -35,19 +35,25 @@ import org.libresonic.player.domain.User;
 import org.libresonic.player.domain.UserSettings;
 import org.libresonic.player.service.SecurityService;
 import org.libresonic.player.service.SettingsService;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller for the page used to administrate per-user settings.
  *
  * @author Sindre Mehus
  */
-public class PersonalSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("personalSettings")
+public class PersonalSettingsController {
 
     private SettingsService settingsService;
     private SecurityService securityService;
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    protected String formBackingObject(HttpServletRequest request, ModelMap model) throws Exception {
         PersonalSettingsCommand command = new PersonalSettingsCommand();
 
         User user = securityService.getCurrentUser(request);
@@ -98,12 +104,13 @@ public class PersonalSettingsController extends SimpleFormController {
             }
         }
 
-        return command;
+        model.addAttribute("personalsettings", command);
+
+        return "personalSettings";
     }
 
-    @Override
-    protected void doSubmitAction(Object comm) throws Exception {
-        PersonalSettingsCommand command = (PersonalSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected String doSubmitAction(@ModelAttribute("command") PersonalSettingsCommand command) throws Exception {
 
         int localeIndex = Integer.parseInt(command.getLocaleIndex());
         Locale locale = null;
@@ -148,6 +155,7 @@ public class PersonalSettingsController extends SimpleFormController {
         settingsService.updateUserSettings(settings);
 
         command.setReloadNeeded(true);
+        return "personalSettings";
     }
 
     private int getAvatarId(UserSettings userSettings) {

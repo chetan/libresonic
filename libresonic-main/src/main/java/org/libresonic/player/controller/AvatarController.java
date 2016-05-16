@@ -37,6 +37,7 @@ import org.libresonic.player.service.SettingsService;
  *
  * @author Sindre Mehus
  */
+// TODO:AD This looks like this is more of a service... might need to move this elsewhere
 public class AvatarController implements Controller, LastModified {
 
     private SettingsService settingsService;

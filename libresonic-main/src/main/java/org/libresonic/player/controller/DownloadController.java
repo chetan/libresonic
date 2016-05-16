@@ -19,48 +19,32 @@
  */
 package org.libresonic.player.controller;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.libresonic.player.Logger;
+import org.libresonic.player.domain.*;
+import org.libresonic.player.io.RangeOutputStream;
+import org.libresonic.player.service.*;
+import org.libresonic.player.util.FileUtil;
+import org.libresonic.player.util.HttpRange;
+import org.libresonic.player.util.Util;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.LastModified;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.mvc.LastModified;
-
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.MediaFile;
-import org.libresonic.player.domain.PlayQueue;
-import org.libresonic.player.domain.Player;
-import org.libresonic.player.domain.Playlist;
-import org.libresonic.player.domain.TransferStatus;
-import org.libresonic.player.domain.User;
-import org.libresonic.player.io.RangeOutputStream;
-import org.libresonic.player.service.MediaFileService;
-import org.libresonic.player.service.PlayerService;
-import org.libresonic.player.service.PlaylistService;
-import org.libresonic.player.service.SecurityService;
-import org.libresonic.player.service.SettingsService;
-import org.libresonic.player.service.StatusService;
-import org.libresonic.player.util.FileUtil;
-import org.libresonic.player.util.HttpRange;
-import org.libresonic.player.util.Util;
 
 /**
  * A controller used for downloading files to a remote client. If the requested path refers to a file, the
@@ -69,7 +53,9 @@ import org.libresonic.player.util.Util;
  *
  * @author Sindre Mehus
  */
-public class DownloadController implements Controller, LastModified {
+@Controller
+@RequestMapping("download")
+public class DownloadController implements LastModified {
 
     private static final Logger LOG = Logger.getLogger(DownloadController.class);
 
@@ -80,6 +66,7 @@ public class DownloadController implements Controller, LastModified {
     private SettingsService settingsService;
     private MediaFileService mediaFileService;
 
+    @Override
     public long getLastModified(HttpServletRequest request) {
         try {
             MediaFile mediaFile = getMediaFile(request);
@@ -92,7 +79,8 @@ public class DownloadController implements Controller, LastModified {
         }
     }
 
-    public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         User user = securityService.getCurrentUser(request);
         TransferStatus status = null;

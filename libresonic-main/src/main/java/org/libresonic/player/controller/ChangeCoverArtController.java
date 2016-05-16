@@ -25,7 +25,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -37,12 +41,14 @@ import org.libresonic.player.service.MediaFileService;
  *
  * @author Sindre Mehus
  */
-public class ChangeCoverArtController extends ParameterizableViewController {
+@Controller
+@RequestMapping("changeCoverArt")
+public class ChangeCoverArtController {
 
     private MediaFileService mediaFileService;
 
-    @Override
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(HttpServletRequest request, ModelMap model) throws Exception {
 
         int id = ServletRequestUtils.getRequiredIntParameter(request, "id");
         String artist = request.getParameter("artist");
@@ -61,10 +67,9 @@ public class ChangeCoverArtController extends ParameterizableViewController {
         map.put("artist", artist);
         map.put("album", album);
 
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("model", map);
+        model.put("model", map);
 
-        return result;
+        return "changeCoverArt";
     }
 
     public void setMediaFileService(MediaFileService mediaFileService) {

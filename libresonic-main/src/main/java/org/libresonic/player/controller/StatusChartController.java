@@ -27,6 +27,9 @@ import org.jfree.chart.plot.*;
 import org.jfree.chart.renderer.xy.*;
 import org.jfree.data.*;
 import org.jfree.data.time.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.*;
 
 import javax.servlet.http.*;
@@ -39,6 +42,8 @@ import java.util.List;
  *
  * @author Sindre Mehus
  */
+@Controller
+@RequestMapping("statusChart")
 public class StatusChartController extends AbstractChartController {
 
     private StatusService statusService;
@@ -46,6 +51,7 @@ public class StatusChartController extends AbstractChartController {
     public static final int IMAGE_WIDTH = 350;
     public static final int IMAGE_HEIGHT = 150;
 
+    @RequestMapping(method = RequestMethod.GET)
     public synchronized ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String type = request.getParameter("type");
         int index = Integer.parseInt(request.getParameter("index"));

@@ -23,6 +23,10 @@ import org.libresonic.player.dao.DaoHelper;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -37,11 +41,14 @@ import java.util.Map;
  *
  * @author Sindre Mehus
  */
-public class DBController extends ParameterizableViewController {
+@Controller
+@RequestMapping("db")
+public class DBController {
 
     private DaoHelper daoHelper;
 
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(HttpServletRequest request, ModelMap model) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
 
         String query = request.getParameter("query");
@@ -56,9 +63,8 @@ public class DBController extends ParameterizableViewController {
             }
         }
 
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("model", map);
-        return result;
+        model.put("model", map);
+        return "db";
     }
 
     public void setDaoHelper(DaoHelper daoHelper) {

@@ -29,6 +29,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
@@ -46,15 +50,20 @@ import org.libresonic.player.service.ShareService;
  *
  * @author Sindre Mehus
  */
-public class ExternalPlayerController extends ParameterizableViewController {
+@Controller
+@RequestMapping("/share/**")
+public class ExternalPlayerController {
 
     private SettingsService settingsService;
     private PlayerService playerService;
     private ShareService shareService;
     private MediaFileService mediaFileService;
 
-    @Override
-    protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            ModelMap model) throws Exception {
 
         Map<String, Object> map = new HashMap<String, Object>();
 
@@ -84,9 +93,8 @@ public class ExternalPlayerController extends ParameterizableViewController {
         map.put("redirectUrl", settingsService.getUrlRedirectUrl());
         map.put("player", player.getId());
 
-        ModelAndView result = super.handleRequestInternal(request, response);
-        result.addObject("model", map);
-        return result;
+        model.put("model", map);
+        return "externalPlayer";
     }
 
     private List<MediaFile> getSongs(Share share, String username) throws IOException {

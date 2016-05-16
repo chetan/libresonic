@@ -30,9 +30,13 @@ import org.libresonic.player.service.TranscodingService;
 import org.libresonic.player.util.Util;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,14 +49,16 @@ import java.util.List;
  *
  * @author Sindre Mehus
  */
-public class UserSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("userSettings")
+public class UserSettingsController {
 
     private SecurityService securityService;
     private SettingsService settingsService;
     private TranscodingService transcodingService;
 
-    @Override
-    protected Object formBackingObject(HttpServletRequest request) throws Exception {
+    @RequestMapping(method = RequestMethod.GET)
+    protected String formBackingObject(HttpServletRequest request, ModelMap model) throws Exception {
         UserSettingsCommand command = new UserSettingsCommand();
 
         User user = getUser(request);
@@ -77,7 +83,9 @@ public class UserSettingsController extends SimpleFormController {
         command.setAllMusicFolders(settingsService.getAllMusicFolders());
         command.setAllowedMusicFolderIds(Util.toIntArray(getAllowedMusicFolderIds(user)));
 
-        return command;
+        model.addAttribute("usersettings", command);
+
+        return "redirect:userSettings";
     }
 
     private User getUser(HttpServletRequest request) throws ServletRequestBindingException {
@@ -103,9 +111,8 @@ public class UserSettingsController extends SimpleFormController {
         return result;
     }
 
-    @Override
-    protected void doSubmitAction(Object comm) throws Exception {
-        UserSettingsCommand command = (UserSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected String doSubmitAction(@ModelAttribute("command") UserSettingsCommand command) throws Exception {
 
         if (command.isDeleteUser()) {
             deleteUser(command);
@@ -115,6 +122,8 @@ public class UserSettingsController extends SimpleFormController {
             updateUser(command);
         }
         resetCommand(command);
+
+        return "userSettings";
     }
 
     private void deleteUser(UserSettingsCommand command) {
