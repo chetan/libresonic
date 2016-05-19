@@ -19,17 +19,22 @@
  */
 package org.libresonic.player.filter;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.util.StringUtil;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.libresonic.player.util.StringUtil;
 
 /**
  * Servlet filter which decodes HTTP request parameters.  If a parameter name ends with
@@ -42,9 +47,12 @@ import java.util.Vector;
  */
 public class ParameterDecodingFilter implements Filter {
 
-    public static final String PARAM_SUFFIX = "Utf8Hex";
-    private static final Logger LOG = Logger.getLogger(ParameterDecodingFilter.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(ParameterDecodingFilter.class);
 
+    public static final String PARAM_SUFFIX = "Utf8Hex";
+
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
@@ -55,9 +63,11 @@ public class ParameterDecodingFilter implements Filter {
         chain.doFilter(decodedRequest, response);
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {
     }
 
+    @Override
     public void destroy() {
     }
 

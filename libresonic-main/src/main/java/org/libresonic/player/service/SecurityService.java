@@ -31,15 +31,14 @@ import org.acegisecurity.userdetails.UserDetails;
 import org.acegisecurity.userdetails.UserDetailsService;
 import org.acegisecurity.userdetails.UsernameNotFoundException;
 import org.acegisecurity.wrapper.SecurityContextHolderAwareRequestWrapper;
-import org.springframework.dao.DataAccessException;
-
-import net.sf.ehcache.Ehcache;
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.UserDao;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.MusicFolder;
 import org.libresonic.player.domain.User;
 import org.libresonic.player.util.FileUtil;
+import org.springframework.dao.DataAccessException;
+
+import net.sf.ehcache.Ehcache;
 
 /**
  * Provides security-related services for authentication and authorization.
@@ -48,7 +47,8 @@ import org.libresonic.player.util.FileUtil;
  */
 public class SecurityService implements UserDetailsService {
 
-    private static final Logger LOG = Logger.getLogger(SecurityService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(SecurityService.class);
 
     private UserDao userDao;
     private SettingsService settingsService;
@@ -62,6 +62,7 @@ public class SecurityService implements UserDetailsService {
      * @throws UsernameNotFoundException if the user could not be found or the user has no GrantedAuthority.
      * @throws DataAccessException       If user could not be found for a repository-specific reason.
      */
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
         User user = getUserByName(username);
         if (user == null) {

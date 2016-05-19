@@ -19,7 +19,6 @@
  */
 package org.libresonic.player.domain;
 
-import org.libresonic.player.Logger;
 import org.libresonic.player.util.StringUtil;
 
 /**
@@ -30,7 +29,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class MediaLibraryStatistics {
 
-    private static final Logger LOG = Logger.getLogger(MediaLibraryStatistics.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(MediaLibraryStatistics.class);
 
     private int artistCount;
     private int albumCount;

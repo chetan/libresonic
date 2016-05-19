@@ -46,8 +46,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.MediaFileDao;
 import org.libresonic.player.dao.PlaylistDao;
 import org.libresonic.player.domain.MediaFile;
@@ -66,7 +64,9 @@ import org.libresonic.player.util.Util;
  */
 public class PlaylistService {
 
-    private static final Logger LOG = Logger.getLogger(PlaylistService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(PlaylistService.class);
+
     private MediaFileService mediaFileService;
     private MediaFileDao mediaFileDao;
     private PlaylistDao playlistDao;
@@ -377,6 +377,7 @@ public class PlaylistService {
     }
 
     private class M3UFormat extends PlaylistFormat {
+        @Override
         public Pair<List<MediaFile>, List<String>> parse(BufferedReader reader, MediaFileService mediaFileService) throws IOException {
             List<MediaFile> ok = new ArrayList<MediaFile>();
             List<String> error = new ArrayList<String>();
@@ -395,6 +396,7 @@ public class PlaylistService {
             return new Pair<List<MediaFile>, List<String>>(ok, error);
         }
 
+        @Override
         public void format(List<MediaFile> files, PrintWriter writer) throws IOException {
             writer.println("#EXTM3U");
             for (MediaFile file : files) {
@@ -410,6 +412,7 @@ public class PlaylistService {
      * Implementation of PLS playlist format.
      */
     private class PLSFormat extends PlaylistFormat {
+        @Override
         public Pair<List<MediaFile>, List<String>> parse(BufferedReader reader, MediaFileService mediaFileService) throws IOException {
             List<MediaFile> ok = new ArrayList<MediaFile>();
             List<String> error = new ArrayList<String>();
@@ -433,6 +436,7 @@ public class PlaylistService {
             return new Pair<List<MediaFile>, List<String>>(ok, error);
         }
 
+        @Override
         public void format(List<MediaFile> files, PrintWriter writer) throws IOException {
             writer.println("[playlist]");
             int counter = 0;
@@ -454,6 +458,7 @@ public class PlaylistService {
      * Implementation of XSPF (http://www.xspf.org/) playlist format.
      */
     private class XSPFFormat extends PlaylistFormat {
+        @Override
         public Pair<List<MediaFile>, List<String>> parse(BufferedReader reader, MediaFileService mediaFileService) throws IOException {
             List<MediaFile> ok = new ArrayList<MediaFile>();
             List<String> error = new ArrayList<String>();
@@ -488,6 +493,7 @@ public class PlaylistService {
             return new Pair<List<MediaFile>, List<String>>(ok, error);
         }
 
+        @Override
         public void format(List<MediaFile> files, PrintWriter writer) throws IOException {
             writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             writer.println("<playlist version=\"1\" xmlns=\"http://xspf.org/ns/0/\">");

@@ -25,13 +25,12 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.ParameterizableViewController;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.service.SecurityService;
 import org.libresonic.player.service.SettingsService;
 import org.libresonic.player.service.VersionService;
+import org.libresonic.player.util.HelpUtil;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 /**
  * Controller for the help page.
@@ -72,8 +71,8 @@ public class HelpController extends ParameterizableViewController {
         map.put("serverInfo", serverInfo);
         map.put("usedMemory", totalMemory - freeMemory);
         map.put("totalMemory", totalMemory);
-        map.put("logEntries", Logger.getLatestLogEntries());
-        map.put("logFile", Logger.getLogFile());
+        map.put("logEntries", HelpUtil.getRecentLogs());
+        map.put("logFile", HelpUtil.getLogFilename());
 
         ModelAndView result = super.handleRequestInternal(request, response);
         result.addObject("model", map);

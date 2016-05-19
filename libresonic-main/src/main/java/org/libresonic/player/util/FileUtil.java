@@ -25,8 +25,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.libresonic.player.Logger;
-
 /**
  * Miscellaneous file utility methods.
  *
@@ -34,7 +32,7 @@ import org.libresonic.player.Logger;
  */
 public final class FileUtil {
 
-    private static final Logger LOG = Logger.getLogger(FileUtil.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(FileUtil.class);
 
     /**
      * Disallow external instantiation.

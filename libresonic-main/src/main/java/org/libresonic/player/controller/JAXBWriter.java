@@ -19,6 +19,8 @@
  */
 package org.libresonic.player.controller;
 
+import static org.springframework.web.bind.ServletRequestUtils.*;
+
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Date;
@@ -37,15 +39,11 @@ import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.input.SAXBuilder;
+import org.libresonic.player.util.StringUtil;
 import org.libresonic.restapi.Error;
 import org.libresonic.restapi.ObjectFactory;
 import org.libresonic.restapi.Response;
 import org.libresonic.restapi.ResponseStatus;
-
-import org.libresonic.player.Logger;
-import org.libresonic.player.util.StringUtil;
-
-import static org.springframework.web.bind.ServletRequestUtils.getStringParameter;
 
 /**
  * @author Sindre Mehus
@@ -53,7 +51,7 @@ import static org.springframework.web.bind.ServletRequestUtils.getStringParamete
  */
 public class JAXBWriter {
 
-    private static final Logger LOG = Logger.getLogger(JAXBWriter.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(JAXBWriter.class);
 
     private final javax.xml.bind.JAXBContext jaxbContext;
     private final DatatypeFactory datatypeFactory;

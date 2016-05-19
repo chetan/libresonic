@@ -19,12 +19,6 @@
  */
 package org.libresonic.player.dao;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.MediaFile;
-import org.libresonic.player.domain.Playlist;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,6 +27,11 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.libresonic.player.domain.MediaFile;
+import org.libresonic.player.domain.Playlist;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+
 /**
  * Provides database services for playlists.
  *
@@ -40,7 +39,9 @@ import java.util.TreeMap;
  */
 public class PlaylistDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(PlaylistDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(PlaylistDao.class);
+
     private static final String COLUMNS = "id, username, is_public, name, comment, file_count, duration_seconds, " +
             "created, changed, imported_from";
     private final RowMapper rowMapper = new PlaylistMapper();
@@ -126,6 +127,7 @@ public class PlaylistDao extends AbstractDao {
     }
 
     private static class PlaylistMapper implements ParameterizedRowMapper<Playlist> {
+        @Override
         public Playlist mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Playlist(
                     rs.getInt(1),

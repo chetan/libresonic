@@ -38,13 +38,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.mvc.LastModified;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.Player;
@@ -61,6 +54,11 @@ import org.libresonic.player.service.StatusService;
 import org.libresonic.player.util.FileUtil;
 import org.libresonic.player.util.HttpRange;
 import org.libresonic.player.util.Util;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.servlet.mvc.LastModified;
 
 /**
  * A controller used for downloading files to a remote client. If the requested path refers to a file, the
@@ -71,7 +69,8 @@ import org.libresonic.player.util.Util;
  */
 public class DownloadController implements Controller, LastModified {
 
-    private static final Logger LOG = Logger.getLogger(DownloadController.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(DownloadController.class);
 
     private PlayerService playerService;
     private StatusService statusService;
@@ -80,6 +79,7 @@ public class DownloadController implements Controller, LastModified {
     private SettingsService settingsService;
     private MediaFileService mediaFileService;
 
+    @Override
     public long getLastModified(HttpServletRequest request) {
         try {
             MediaFile mediaFile = getMediaFile(request);
@@ -92,6 +92,7 @@ public class DownloadController implements Controller, LastModified {
         }
     }
 
+    @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         User user = securityService.getCurrentUser(request);

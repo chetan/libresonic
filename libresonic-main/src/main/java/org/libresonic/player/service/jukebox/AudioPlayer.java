@@ -19,6 +19,8 @@
  */
 package org.libresonic.player.service.jukebox;
 
+import static org.libresonic.player.service.jukebox.AudioPlayer.State.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,11 +32,6 @@ import javax.sound.sampled.SourceDataLine;
 
 import org.apache.commons.io.IOUtils;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.service.JukeboxService;
-
-import static org.libresonic.player.service.jukebox.AudioPlayer.State.*;
-
 /**
  * A simple wrapper for playing sound from an input stream.
  * <p/>
@@ -45,8 +42,10 @@ import static org.libresonic.player.service.jukebox.AudioPlayer.State.*;
  */
 public class AudioPlayer {
 
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(AudioPlayer.class);
+
     public static final float DEFAULT_GAIN = 0.75f;
-    private static final Logger LOG = Logger.getLogger(JukeboxService.class);
 
     private final InputStream in;
     private final Listener listener;
@@ -165,6 +164,7 @@ public class AudioPlayer {
             new Thread(this).start();
         }
 
+        @Override
         public void run() {
             try {
                 byte[] buffer = new byte[line.getBufferSize()];

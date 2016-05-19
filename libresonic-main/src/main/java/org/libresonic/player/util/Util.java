@@ -32,7 +32,6 @@ import java.util.Random;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.libresonic.player.Logger;
 import org.libresonic.player.service.SettingsService;
 
 /**
@@ -42,7 +41,7 @@ import org.libresonic.player.service.SettingsService;
  */
 public final class Util {
 
-    private static final Logger LOG = Logger.getLogger(Util.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Util.class);
     private static final Random RANDOM = new Random(System.currentTimeMillis());
 
     /**
@@ -153,6 +152,7 @@ public final class Util {
 
     public static <T> Iterable<T> toIterable(final Enumeration<?> e) {
         return new Iterable<T>() {
+            @Override
             public Iterator<T> iterator() {
                 return toIterator(e);
             }
@@ -161,14 +161,17 @@ public final class Util {
 
     public static <T> Iterator<T> toIterator(final Enumeration<?> e) {
         return new Iterator<T>() {
+            @Override
             public boolean hasNext() {
                 return e.hasMoreElements();
             }
 
+            @Override
             public T next() {
                 return (T) e.nextElement();
             }
 
+            @Override
             public void remove() {
                 throw new UnsupportedOperationException();
             }

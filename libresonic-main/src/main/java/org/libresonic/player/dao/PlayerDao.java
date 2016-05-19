@@ -27,14 +27,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.CoverArtScheme;
+import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.Player;
 import org.libresonic.player.domain.PlayerTechnology;
-import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.TranscodeScheme;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 
 /**
  * Provides player-related database services.
@@ -43,12 +41,13 @@ import org.libresonic.player.domain.TranscodeScheme;
  */
 public class PlayerDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(PlayerDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(PlayerDao.class);
+
     private static final String COLUMNS = "id, name, type, username, ip_address, auto_control_enabled, " +
                                           "last_seen, cover_art_scheme, transcode_scheme, dynamic_ip, technology, client_id";
 
-    private PlayerRowMapper rowMapper = new PlayerRowMapper();
-    private Map<String, PlayQueue> playlists = Collections.synchronizedMap(new HashMap<String, PlayQueue>());
+    private final PlayerRowMapper rowMapper = new PlayerRowMapper();
+    private final Map<String, PlayQueue> playlists = Collections.synchronizedMap(new HashMap<String, PlayQueue>());
 
     /**
      * Returns all players.
@@ -170,6 +169,7 @@ public class PlayerDao extends AbstractDao {
     }
 
     private class PlayerRowMapper implements ParameterizedRowMapper<Player> {
+        @Override
         public Player mapRow(ResultSet rs, int rowNum) throws SQLException {
             Player player = new Player();
             int col = 1;

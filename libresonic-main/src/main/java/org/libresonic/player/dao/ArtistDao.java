@@ -19,13 +19,6 @@
  */
 package org.libresonic.player.dao;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.Artist;
-import org.libresonic.player.domain.MusicFolder;
-
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -34,6 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.libresonic.player.domain.Artist;
+import org.libresonic.player.domain.MusicFolder;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
+
 /**
  * Provides database services for artists.
  *
@@ -41,7 +39,8 @@ import java.util.Map;
  */
 public class ArtistDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(ArtistDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(ArtistDao.class);
+
     private static final String COLUMNS = "id, name, cover_art_path, album_count, last_scanned, present, folder_id";
 
     private final RowMapper rowMapper = new ArtistMapper();
@@ -200,6 +199,7 @@ public class ArtistDao extends AbstractDao {
     }
 
     private static class ArtistMapper implements ParameterizedRowMapper<Artist> {
+        @Override
         public Artist mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Artist(
                     rs.getInt(1),

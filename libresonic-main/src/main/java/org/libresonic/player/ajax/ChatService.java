@@ -19,14 +19,6 @@
  */
 package org.libresonic.player.ajax;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.service.SecurityService;
-import org.libresonic.player.util.BoundedList;
-import org.apache.commons.lang.StringUtils;
-import org.directwebremoting.WebContext;
-import org.directwebremoting.WebContextFactory;
-
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +29,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.directwebremoting.WebContext;
+import org.directwebremoting.WebContextFactory;
+import org.libresonic.player.service.SecurityService;
+import org.libresonic.player.util.BoundedList;
+
 /**
  * Provides AJAX-enabled services for the chatting.
  * This class is used by the DWR framework (http://getahead.ltd.uk/dwr/).
@@ -45,7 +45,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class ChatService {
 
-    private static final Logger LOG = Logger.getLogger(ChatService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(ChatService.class);
+
     private static final String CACHE_KEY = "1";
     private static final int MAX_MESSAGES = 10;
     private static final long TTL_MILLIS = 3L * 24L * 60L * 60L * 1000L; // 3 days.
@@ -62,6 +64,7 @@ public class ChatService {
         // Delete old messages every hour.
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         Runnable runnable = new Runnable() {
+            @Override
             public void run() {
                 removeOldMessages();
             }

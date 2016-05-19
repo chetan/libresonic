@@ -19,6 +19,10 @@
  */
 package org.libresonic.player.service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -53,12 +57,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.PodcastDao;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PodcastChannel;
@@ -76,7 +74,9 @@ import org.libresonic.player.util.StringUtil;
  */
 public class PodcastService {
 
-    private static final Logger LOG = Logger.getLogger(PodcastService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(PodcastService.class);
+
     private static final DateFormat[] RSS_DATE_FORMATS = {new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US),
             new SimpleDateFormat("dd MMM yyyy HH:mm:ss Z", Locale.US)};
 
@@ -95,6 +95,7 @@ public class PodcastService {
 
     public PodcastService() {
         ThreadFactory threadFactory = new ThreadFactory() {
+            @Override
             public Thread newThread(Runnable r) {
                 Thread t = Executors.defaultThreadFactory().newThread(r);
                 t.setDaemon(true);
@@ -125,6 +126,7 @@ public class PodcastService {
 
     public synchronized void schedule() {
         Runnable task = new Runnable() {
+            @Override
             public void run() {
                 LOG.info("Starting scheduled Podcast refresh.");
                 refreshAllChannels(true);
@@ -291,6 +293,7 @@ public class PodcastService {
     private void refreshChannels(final List<PodcastChannel> channels, final boolean downloadEpisodes) {
         for (final PodcastChannel channel : channels) {
             Runnable task = new Runnable() {
+                @Override
                 public void run() {
                     doRefreshChannel(channel, downloadEpisodes);
                 }
@@ -409,6 +412,7 @@ public class PodcastService {
 
     public void downloadEpisode(final PodcastEpisode episode) {
         Runnable task = new Runnable() {
+            @Override
             public void run() {
                 doDownloadEpisode(episode);
             }
@@ -462,6 +466,7 @@ public class PodcastService {
 
         // Sort episode in reverse chronological order (newest first)
         Collections.sort(episodes, new Comparator<PodcastEpisode>() {
+            @Override
             public int compare(PodcastEpisode a, PodcastEpisode b) {
                 long timeA = a.getPublishDate() == null ? 0L : a.getPublishDate().getTime();
                 long timeB = b.getPublishDate() == null ? 0L : b.getPublishDate().getTime();

@@ -45,12 +45,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.servlet.mvc.LastModified;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.AlbumDao;
 import org.libresonic.player.dao.ArtistDao;
 import org.libresonic.player.domain.Album;
@@ -68,6 +62,10 @@ import org.libresonic.player.service.SettingsService;
 import org.libresonic.player.service.TranscodingService;
 import org.libresonic.player.service.metadata.JaudiotaggerParser;
 import org.libresonic.player.util.StringUtil;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.servlet.mvc.LastModified;
 
 /**
  * Controller which produces cover art images.
@@ -81,7 +79,8 @@ public class CoverArtController implements Controller, LastModified {
     public static final String PLAYLIST_COVERART_PREFIX = "pl-";
     public static final String PODCAST_COVERART_PREFIX = "pod-";
 
-    private static final Logger LOG = Logger.getLogger(CoverArtController.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(CoverArtController.class);
 
     private MediaFileService mediaFileService;
     private TranscodingService transcodingService;
@@ -96,6 +95,7 @@ public class CoverArtController implements Controller, LastModified {
         semaphore = new Semaphore(settingsService.getCoverArtConcurrency());
     }
 
+    @Override
     public long getLastModified(HttpServletRequest request) {
         CoverArtRequest coverArtRequest = createCoverArtRequest(request);
         long result = coverArtRequest.lastModified();
@@ -103,6 +103,7 @@ public class CoverArtController implements Controller, LastModified {
         return result;
     }
 
+    @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         CoverArtRequest coverArtRequest = createCoverArtRequest(request);

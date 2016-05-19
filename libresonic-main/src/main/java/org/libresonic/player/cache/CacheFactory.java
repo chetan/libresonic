@@ -22,15 +22,13 @@ package org.libresonic.player.cache;
 
 import java.io.File;
 
+import org.libresonic.player.service.SettingsService;
 import org.springframework.beans.factory.InitializingBean;
 
-import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
 import net.sf.ehcache.config.Configuration;
 import net.sf.ehcache.config.ConfigurationFactory;
-import org.libresonic.player.Logger;
-import org.libresonic.player.service.SettingsService;
 
 /**
  * Initializes Ehcache and creates caches.
@@ -40,9 +38,12 @@ import org.libresonic.player.service.SettingsService;
  */
 public class CacheFactory implements InitializingBean {
 
-    private static final Logger LOG = Logger.getLogger(CacheFactory.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(CacheFactory.class);
+
     private CacheManager cacheManager;
 
+    @Override
     public void afterPropertiesSet() throws Exception {
         Configuration configuration = ConfigurationFactory.parseConfiguration();
 

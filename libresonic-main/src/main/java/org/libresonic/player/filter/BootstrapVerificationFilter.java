@@ -19,8 +19,9 @@
  */
 package org.libresonic.player.filter;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.service.SettingsService;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,9 +32,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
+import org.libresonic.player.service.SettingsService;
 
 /**
  * This filter is executed very early in the filter chain. It verifies that
@@ -48,10 +47,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class BootstrapVerificationFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(BootstrapVerificationFilter.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(BootstrapVerificationFilter.class);
+
     private boolean libresonicHomeVerified = false;
     private final AtomicBoolean serverInfoLogged = new AtomicBoolean();
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
@@ -113,9 +115,11 @@ public class BootstrapVerificationFilter implements Filter {
                     "</html>");
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {
     }
 
+    @Override
     public void destroy() {
     }
 }

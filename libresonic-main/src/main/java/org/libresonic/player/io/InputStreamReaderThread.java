@@ -19,10 +19,12 @@
  */
 package org.libresonic.player.io;
 
-import org.libresonic.player.*;
-import org.apache.commons.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-import java.io.*;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Utility class which reads everything from an input stream and optionally logs it.
@@ -32,11 +34,12 @@ import java.io.*;
  */
 public class InputStreamReaderThread extends Thread {
 
-    private static final Logger LOG = Logger.getLogger(InputStreamReaderThread.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(InputStreamReaderThread.class);
 
-    private InputStream input;
-    private String name;
-    private boolean log;
+    private final InputStream input;
+    private final String name;
+    private final boolean log;
 
     public InputStreamReaderThread(InputStream input, String name, boolean log) {
         super(name + " InputStreamLogger");
@@ -45,6 +48,7 @@ public class InputStreamReaderThread extends Thread {
         this.log = log;
     }
 
+    @Override
     public void run() {
         BufferedReader reader = null;
         try {

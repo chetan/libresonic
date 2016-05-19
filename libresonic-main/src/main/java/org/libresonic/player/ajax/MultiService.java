@@ -27,8 +27,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.directwebremoting.WebContextFactory;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.ArtistBio;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.MusicFolder;
@@ -48,7 +46,8 @@ import org.libresonic.player.service.SettingsService;
  */
 public class MultiService {
 
-    private static final Logger LOG = Logger.getLogger(MultiService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(MultiService.class);
 
     private NetworkService networkService;
     private MediaFileService mediaFileService;

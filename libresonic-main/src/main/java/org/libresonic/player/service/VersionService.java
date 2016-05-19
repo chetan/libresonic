@@ -19,16 +19,6 @@
  */
 package org.libresonic.player.service;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.Version;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +30,15 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpConnectionParams;
+import org.libresonic.player.domain.Version;
+
 /**
  * Provides version-related services, including functionality for determining whether a newer
  * version of Libresonic is available.
@@ -49,7 +48,9 @@ import java.util.regex.Pattern;
 public class VersionService {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
-    private static final Logger LOG = Logger.getLogger(VersionService.class);
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(VersionService.class);
 
     private Version localVersion;
     private Version latestFinalVersion;

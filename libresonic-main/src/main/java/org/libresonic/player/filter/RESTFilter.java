@@ -19,6 +19,8 @@
  */
 package org.libresonic.player.filter;
 
+import static org.libresonic.player.controller.RESTController.ErrorCode.*;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -30,15 +32,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.util.NestedServletException;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.controller.JAXBWriter;
 import org.libresonic.player.controller.RESTController;
-
-import static org.libresonic.player.controller.RESTController.ErrorCode.GENERIC;
-import static org.libresonic.player.controller.RESTController.ErrorCode.MISSING_PARAMETER;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.util.NestedServletException;
 
 /**
  * Intercepts exceptions thrown by RESTController.
@@ -50,10 +47,11 @@ import static org.libresonic.player.controller.RESTController.ErrorCode.MISSING_
  */
 public class RESTFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(RESTFilter.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(RESTFilter.class);
 
     private final JAXBWriter jaxbWriter = new JAXBWriter();
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         try {
             HttpServletResponse response = (HttpServletResponse) res;
@@ -87,9 +85,11 @@ public class RESTFilter implements Filter {
         return x.getClass().getSimpleName();
     }
 
+    @Override
     public void init(FilterConfig filterConfig) {
     }
 
+    @Override
     public void destroy() {
     }
 }

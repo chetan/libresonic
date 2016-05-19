@@ -39,8 +39,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.UserSettings;
 import org.libresonic.player.util.StringUtil;
@@ -55,7 +53,9 @@ import org.libresonic.player.util.StringUtil;
  */
 public class AudioScrobblerService {
 
-    private static final Logger LOG = Logger.getLogger(AudioScrobblerService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(AudioScrobblerService.class);
+
     private static final int MAX_PENDING_REGISTRATION = 2000;
 
     private RegistrationThread thread;

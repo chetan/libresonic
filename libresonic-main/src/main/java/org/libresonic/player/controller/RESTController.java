@@ -19,6 +19,9 @@
  */
 package org.libresonic.player.controller;
 
+import static org.libresonic.player.security.RESTRequestParameterProcessingFilter.*;
+import static org.springframework.web.bind.ServletRequestUtils.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -35,56 +38,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-import org.libresonic.restapi.AlbumID3;
-import org.libresonic.restapi.AlbumList;
-import org.libresonic.restapi.AlbumList2;
-import org.libresonic.restapi.AlbumWithSongsID3;
-import org.libresonic.restapi.ArtistID3;
-import org.libresonic.restapi.ArtistInfo;
-import org.libresonic.restapi.ArtistInfo2;
-import org.libresonic.restapi.ArtistWithAlbumsID3;
-import org.libresonic.restapi.ArtistsID3;
-import org.libresonic.restapi.Bookmarks;
-import org.libresonic.restapi.ChatMessage;
-import org.libresonic.restapi.ChatMessages;
-import org.libresonic.restapi.Child;
-import org.libresonic.restapi.Directory;
-import org.libresonic.restapi.Genres;
-import org.libresonic.restapi.Index;
-import org.libresonic.restapi.IndexID3;
-import org.libresonic.restapi.Indexes;
-import org.libresonic.restapi.InternetRadioStation;
-import org.libresonic.restapi.InternetRadioStations;
-import org.libresonic.restapi.JukeboxPlaylist;
-import org.libresonic.restapi.JukeboxStatus;
-import org.libresonic.restapi.License;
-import org.libresonic.restapi.Lyrics;
-import org.libresonic.restapi.MediaType;
-import org.libresonic.restapi.MusicFolders;
-import org.libresonic.restapi.NewestPodcasts;
-import org.libresonic.restapi.NowPlaying;
-import org.libresonic.restapi.NowPlayingEntry;
-import org.libresonic.restapi.PlaylistWithSongs;
-import org.libresonic.restapi.Playlists;
-import org.libresonic.restapi.PodcastStatus;
-import org.libresonic.restapi.Podcasts;
-import org.libresonic.restapi.Response;
-import org.libresonic.restapi.SearchResult2;
-import org.libresonic.restapi.SearchResult3;
-import org.libresonic.restapi.Shares;
-import org.libresonic.restapi.SimilarSongs;
-import org.libresonic.restapi.SimilarSongs2;
-import org.libresonic.restapi.Songs;
-import org.libresonic.restapi.Starred;
-import org.libresonic.restapi.Starred2;
-import org.libresonic.restapi.TopSongs;
-import org.libresonic.restapi.Users;
-import org.libresonic.restapi.Videos;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.ajax.ChatService;
 import org.libresonic.player.ajax.LyricsInfo;
 import org.libresonic.player.ajax.LyricsService;
@@ -139,9 +92,54 @@ import org.libresonic.player.service.TranscodingService;
 import org.libresonic.player.util.Pair;
 import org.libresonic.player.util.StringUtil;
 import org.libresonic.player.util.Util;
-
-import static org.libresonic.player.security.RESTRequestParameterProcessingFilter.decrypt;
-import static org.springframework.web.bind.ServletRequestUtils.*;
+import org.libresonic.restapi.AlbumID3;
+import org.libresonic.restapi.AlbumList;
+import org.libresonic.restapi.AlbumList2;
+import org.libresonic.restapi.AlbumWithSongsID3;
+import org.libresonic.restapi.ArtistID3;
+import org.libresonic.restapi.ArtistInfo;
+import org.libresonic.restapi.ArtistInfo2;
+import org.libresonic.restapi.ArtistWithAlbumsID3;
+import org.libresonic.restapi.ArtistsID3;
+import org.libresonic.restapi.Bookmarks;
+import org.libresonic.restapi.ChatMessage;
+import org.libresonic.restapi.ChatMessages;
+import org.libresonic.restapi.Child;
+import org.libresonic.restapi.Directory;
+import org.libresonic.restapi.Genres;
+import org.libresonic.restapi.Index;
+import org.libresonic.restapi.IndexID3;
+import org.libresonic.restapi.Indexes;
+import org.libresonic.restapi.InternetRadioStation;
+import org.libresonic.restapi.InternetRadioStations;
+import org.libresonic.restapi.JukeboxPlaylist;
+import org.libresonic.restapi.JukeboxStatus;
+import org.libresonic.restapi.License;
+import org.libresonic.restapi.Lyrics;
+import org.libresonic.restapi.MediaType;
+import org.libresonic.restapi.MusicFolders;
+import org.libresonic.restapi.NewestPodcasts;
+import org.libresonic.restapi.NowPlaying;
+import org.libresonic.restapi.NowPlayingEntry;
+import org.libresonic.restapi.PlaylistWithSongs;
+import org.libresonic.restapi.Playlists;
+import org.libresonic.restapi.PodcastStatus;
+import org.libresonic.restapi.Podcasts;
+import org.libresonic.restapi.Response;
+import org.libresonic.restapi.SearchResult2;
+import org.libresonic.restapi.SearchResult3;
+import org.libresonic.restapi.Shares;
+import org.libresonic.restapi.SimilarSongs;
+import org.libresonic.restapi.SimilarSongs2;
+import org.libresonic.restapi.Songs;
+import org.libresonic.restapi.Starred;
+import org.libresonic.restapi.Starred2;
+import org.libresonic.restapi.TopSongs;
+import org.libresonic.restapi.Users;
+import org.libresonic.restapi.Videos;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 
 /**
  * Multi-controller used for the REST API.
@@ -154,7 +152,8 @@ import static org.springframework.web.bind.ServletRequestUtils.*;
  */
 public class RESTController extends MultiActionController {
 
-    private static final Logger LOG = Logger.getLogger(RESTController.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(RESTController.class);
 
     private SettingsService settingsService;
     private SecurityService securityService;

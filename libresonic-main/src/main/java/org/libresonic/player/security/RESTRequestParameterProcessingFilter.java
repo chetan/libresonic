@@ -37,8 +37,6 @@ import org.acegisecurity.providers.ProviderManager;
 import org.acegisecurity.providers.UsernamePasswordAuthenticationToken;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.controller.JAXBWriter;
 import org.libresonic.player.controller.RESTController;
 import org.libresonic.player.domain.LicenseInfo;
@@ -61,7 +59,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class RESTRequestParameterProcessingFilter implements Filter {
 
-    private static final Logger LOG = Logger.getLogger(RESTRequestParameterProcessingFilter.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(RESTRequestParameterProcessingFilter.class);
 
     private final JAXBWriter jaxbWriter = new JAXBWriter();
     private ProviderManager authenticationManager;
@@ -69,6 +68,7 @@ public class RESTRequestParameterProcessingFilter implements Filter {
     private SecurityService securityService;
     private LoginFailureLogger loginFailureLogger;
 
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if (!(request instanceof HttpServletRequest)) {
             throw new ServletException("Can only process HttpServletRequest");
@@ -200,9 +200,11 @@ public class RESTRequestParameterProcessingFilter implements Filter {
         }
     }
 
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
+    @Override
     public void destroy() {
     }
 

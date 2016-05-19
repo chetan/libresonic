@@ -19,15 +19,14 @@
  */
 package org.libresonic.player.io;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.MediaFile;
-import org.libresonic.player.domain.PlayQueue;
-import org.libresonic.player.service.SettingsService;
-import org.apache.commons.lang.StringUtils;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+
+import org.apache.commons.lang.StringUtils;
+import org.libresonic.player.domain.MediaFile;
+import org.libresonic.player.domain.PlayQueue;
+import org.libresonic.player.service.SettingsService;
 
 /**
  * Implements SHOUTcast support by decorating an existing output stream.
@@ -39,7 +38,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class ShoutCastOutputStream extends OutputStream {
 
-    private static final Logger LOG = Logger.getLogger(ShoutCastOutputStream.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(ShoutCastOutputStream.class);
 
     /**
      * Number of bytes between each SHOUTcast metadata block.
@@ -49,12 +49,12 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * The underlying output stream to decorate.
      */
-    private OutputStream out;
+    private final OutputStream out;
 
     /**
      * What to write in the SHOUTcast metadata is fetched from the playlist.
      */
-    private PlayQueue playQueue;
+    private final PlayQueue playQueue;
 
     /**
      * Keeps track of the number of bytes written (excluding meta-data).  Between 0 and {@link #META_DATA_INTERVAL}.
@@ -66,7 +66,7 @@ public class ShoutCastOutputStream extends OutputStream {
      */
     private String previousStreamTitle;
 
-    private SettingsService settingsService;
+    private final SettingsService settingsService;
 
     /**
      * Creates a new SHOUTcast-decorated stream for the given output stream.
@@ -83,6 +83,7 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * Writes the given byte array to the underlying stream, adding SHOUTcast meta-data as necessary.
      */
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
 
         int bytesWritten = 0;
@@ -106,6 +107,7 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * Writes the given byte array to the underlying stream, adding SHOUTcast meta-data as necessary.
      */
+    @Override
     public void write(byte[] b) throws IOException {
         write(b, 0, b.length);
     }
@@ -113,6 +115,7 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * Writes the given byte to the underlying stream, adding SHOUTcast meta-data as necessary.
      */
+    @Override
     public void write(int b) throws IOException {
         byte[] buf = new byte[]{(byte) b};
         write(buf);
@@ -121,6 +124,7 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * Flushes the underlying stream.
      */
+    @Override
     public void flush() throws IOException {
         out.flush();
     }
@@ -128,6 +132,7 @@ public class ShoutCastOutputStream extends OutputStream {
     /**
      * Closes the underlying stream.
      */
+    @Override
     public void close() throws IOException {
         out.close();
     }

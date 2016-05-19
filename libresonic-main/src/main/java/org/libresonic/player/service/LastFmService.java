@@ -29,17 +29,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
-
-import de.umass.lastfm.Artist;
-import de.umass.lastfm.Caller;
-import de.umass.lastfm.ImageSize;
-import de.umass.lastfm.Track;
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.ArtistDao;
 import org.libresonic.player.dao.MediaFileDao;
 import org.libresonic.player.domain.ArtistBio;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.MusicFolder;
+
+import de.umass.lastfm.Artist;
+import de.umass.lastfm.Caller;
+import de.umass.lastfm.ImageSize;
+import de.umass.lastfm.Track;
 
 /**
  * Provides services from the Last.fm REST API.
@@ -51,7 +50,8 @@ public class LastFmService {
 
     private static final String LAST_FM_KEY = "ece4499898a9440896dfdce5dab26bbf";
     private static final long CACHE_TIME_TO_LIVE_MILLIS = 6 * 30 * 24 * 3600 * 1000L; // 6 months
-    private static final Logger LOG = Logger.getLogger(LastFmService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(LastFmService.class);
 
     private MediaFileDao mediaFileDao;
     private MediaFileService mediaFileService;

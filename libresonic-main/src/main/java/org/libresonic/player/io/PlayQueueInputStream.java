@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.Player;
@@ -43,7 +42,8 @@ import org.libresonic.player.util.FileUtil;
  */
 public class PlayQueueInputStream extends InputStream {
 
-    private static final Logger LOG = Logger.getLogger(PlayQueueInputStream.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(PlayQueueInputStream.class);
 
     private final Player player;
     private final TransferStatus status;
@@ -55,7 +55,7 @@ public class PlayQueueInputStream extends InputStream {
     private final MediaFileService mediaFileService;
     private MediaFile currentFile;
     private InputStream currentInputStream;
-    private SearchService searchService;
+    private final SearchService searchService;
 
     public PlayQueueInputStream(Player player, TransferStatus status, Integer maxBitRate, String preferredTargetFormat,
                                 VideoTranscodingSettings videoTranscodingSettings, TranscodingService transcodingService,

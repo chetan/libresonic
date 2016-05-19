@@ -19,8 +19,13 @@
  */
 package org.libresonic.player.service.metadata;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.MediaFile;
+import java.io.File;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.logging.LogManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.jaudiotagger.audio.AudioFile;
@@ -30,13 +35,7 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
 import org.jaudiotagger.tag.datatype.Artwork;
 import org.jaudiotagger.tag.reference.GenreTypes;
-
-import java.io.File;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.logging.LogManager;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.libresonic.player.domain.MediaFile;
 
 /**
  * Parses meta data from audio files using the Jaudiotagger library
@@ -46,7 +45,9 @@ import java.util.regex.Pattern;
  */
 public class JaudiotaggerParser extends MetaDataParser {
 
-    private static final Logger LOG = Logger.getLogger(JaudiotaggerParser.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(JaudiotaggerParser.class);
+
     private static final Pattern GENRE_PATTERN = Pattern.compile("\\((\\d+)\\).*");
     private static final Pattern TRACK_NUMBER_PATTERN = Pattern.compile("(\\d+)/\\d+");
     private static final Pattern YEAR_NUMBER_PATTERN = Pattern.compile("(\\d{4}).*");

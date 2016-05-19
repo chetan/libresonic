@@ -19,10 +19,9 @@
  */
 package org.libresonic.player.ldap;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.User;
-import org.libresonic.player.service.SecurityService;
-import org.libresonic.player.service.SettingsService;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.acegisecurity.BadCredentialsException;
 import org.acegisecurity.ldap.DefaultInitialDirContextFactory;
 import org.acegisecurity.ldap.search.FilterBasedLdapUserSearch;
@@ -30,9 +29,9 @@ import org.acegisecurity.providers.ldap.LdapAuthenticator;
 import org.acegisecurity.providers.ldap.authenticator.BindAuthenticator;
 import org.acegisecurity.userdetails.ldap.LdapUserDetails;
 import org.apache.commons.lang.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
+import org.libresonic.player.domain.User;
+import org.libresonic.player.service.SecurityService;
+import org.libresonic.player.service.SettingsService;
 
 /**
  * LDAP authenticator which uses a delegate {@link BindAuthenticator}, and which
@@ -42,7 +41,8 @@ import java.util.Map;
  */
 public class LibresonicLdapBindAuthenticator implements LdapAuthenticator {
 
-    private static final Logger LOG = Logger.getLogger(LibresonicLdapBindAuthenticator.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(LibresonicLdapBindAuthenticator.class);
 
     private SecurityService securityService;
     private SettingsService settingsService;
@@ -50,6 +50,7 @@ public class LibresonicLdapBindAuthenticator implements LdapAuthenticator {
     private long authenticatorTimestamp;
     private BindAuthenticator delegateAuthenticator;
 
+    @Override
     public LdapUserDetails authenticate(String username, String password) {
 
         // LDAP authentication must be enabled on the system.

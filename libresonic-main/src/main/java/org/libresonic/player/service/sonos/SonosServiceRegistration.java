@@ -33,8 +33,6 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.util.Pair;
 import org.libresonic.player.util.StringUtil;
 
@@ -44,7 +42,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class SonosServiceRegistration {
 
-    private static final Logger LOG = Logger.getLogger(SonosServiceRegistration.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(SonosServiceRegistration.class);
 
     public void setEnabled(String libresonicBaseUrl, String sonosControllerIp, boolean enabled, String sonosServiceName, int sonosServiceId) throws IOException {
         String localUrl = libresonicBaseUrl + "ws/Sonos";

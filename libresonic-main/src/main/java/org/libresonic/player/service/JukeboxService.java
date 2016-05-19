@@ -19,11 +19,11 @@
  */
 package org.libresonic.player.service;
 
+import static org.libresonic.player.service.jukebox.AudioPlayer.State.*;
+
 import java.io.InputStream;
 
 import org.apache.commons.io.IOUtils;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.Player;
@@ -34,8 +34,6 @@ import org.libresonic.player.domain.VideoTranscodingSettings;
 import org.libresonic.player.service.jukebox.AudioPlayer;
 import org.libresonic.player.util.FileUtil;
 
-import static org.libresonic.player.service.jukebox.AudioPlayer.State.EOM;
-
 /**
  * Plays music on the local audio device.
  *
@@ -43,7 +41,8 @@ import static org.libresonic.player.service.jukebox.AudioPlayer.State.EOM;
  */
 public class JukeboxService implements AudioPlayer.Listener {
 
-    private static final Logger LOG = Logger.getLogger(JukeboxService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(JukeboxService.class);
 
     private AudioPlayer audioPlayer;
     private TranscodingService transcodingService;
@@ -125,6 +124,7 @@ public class JukeboxService implements AudioPlayer.Listener {
         }
     }
 
+    @Override
     public synchronized void stateChanged(AudioPlayer audioPlayer, AudioPlayer.State state) {
         if (state == EOM) {
             player.getPlayQueue().next();

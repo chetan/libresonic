@@ -28,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.RandomStringUtils;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.ShareDao;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.MusicFolder;
@@ -44,7 +42,8 @@ import org.libresonic.player.domain.User;
  */
 public class ShareService {
 
-    private static final Logger LOG = Logger.getLogger(ShareService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(ShareService.class);
 
     private ShareDao shareDao;
     private SecurityService securityService;

@@ -28,8 +28,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.commons.lang.ObjectUtils;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.AlbumDao;
 import org.libresonic.player.dao.ArtistDao;
 import org.libresonic.player.dao.MediaFileDao;
@@ -48,8 +46,10 @@ import org.libresonic.player.util.FileUtil;
  */
 public class MediaScannerService {
 
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(MediaScannerService.class);
+
     private static final int INDEX_VERSION = 15;
-    private static final Logger LOG = Logger.getLogger(MediaScannerService.class);
 
     private MediaLibraryStatistics statistics;
 

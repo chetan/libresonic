@@ -19,10 +19,9 @@
  */
 package org.libresonic.player.dao.schema.hsql;
 
-import org.libresonic.player.*;
 import org.libresonic.player.dao.schema.Schema;
 import org.libresonic.player.domain.TranscodeScheme;
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Used for creating and evolving the database schema.
@@ -31,8 +30,9 @@ import org.springframework.jdbc.core.*;
  * @author Sindre Mehus
  */
 public class Schema30 extends Schema {
-    private static final Logger LOG = Logger.getLogger(Schema30.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Schema30.class);
 
+    @Override
     public void execute(JdbcTemplate template) {
 
         if (template.queryForInt("select count(*) from version where version = 6") == 0) {

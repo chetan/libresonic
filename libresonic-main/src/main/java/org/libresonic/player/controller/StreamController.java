@@ -30,12 +30,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.ServletRequestUtils;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PlayQueue;
 import org.libresonic.player.domain.Player;
@@ -58,6 +52,10 @@ import org.libresonic.player.service.sonos.SonosHelper;
 import org.libresonic.player.util.HttpRange;
 import org.libresonic.player.util.StringUtil;
 import org.libresonic.player.util.Util;
+import org.springframework.web.bind.ServletRequestBindingException;
+import org.springframework.web.bind.ServletRequestUtils;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
 
 /**
  * A controller which streams the content of a {@link org.libresonic.player.domain.PlayQueue} to a remote
@@ -67,7 +65,8 @@ import org.libresonic.player.util.Util;
  */
 public class StreamController implements Controller {
 
-    private static final Logger LOG = Logger.getLogger(StreamController.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(StreamController.class);
 
     private StatusService statusService;
     private PlayerService playerService;
@@ -79,6 +78,7 @@ public class StreamController implements Controller {
     private MediaFileService mediaFileService;
     private SearchService searchService;
 
+    @Override
     public ModelAndView handleRequest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         TransferStatus status = null;

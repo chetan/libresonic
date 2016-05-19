@@ -19,21 +19,21 @@
  */
 package org.libresonic.player.taglib;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.filter.ParameterDecodingFilter;
-import org.libresonic.player.util.StringUtil;
-import org.apache.taglibs.standard.tag.common.core.UrlSupport;
-import org.apache.commons.lang.CharUtils;
-
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.JspTagException;
-import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+
+import org.apache.commons.lang.CharUtils;
+import org.apache.taglibs.standard.tag.common.core.UrlSupport;
+import org.libresonic.player.filter.ParameterDecodingFilter;
+import org.libresonic.player.util.StringUtil;
 
 /**
  * Creates a URL with optional query parameters. Similar to 'c:url', but
@@ -52,19 +52,22 @@ import java.util.List;
  */
 public class UrlTag extends BodyTagSupport {
 
-    private String DEFAULT_ENCODING = "Utf8Hex";
-    private static final Logger LOG = Logger.getLogger(UrlTag.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(UrlTag.class);
+
+    private final String DEFAULT_ENCODING = "Utf8Hex";
 
     private String var;
     private String value;
     private String encoding = DEFAULT_ENCODING;
-    private List<Parameter> parameters = new ArrayList<Parameter>();
+    private final List<Parameter> parameters = new ArrayList<Parameter>();
 
+    @Override
     public int doStartTag() throws JspException {
         parameters.clear();
         return EVAL_BODY_BUFFERED;
     }
 
+    @Override
     public int doEndTag() throws JspException {
 
         // Rewrite and encode the url.
@@ -149,6 +152,7 @@ public class UrlTag extends BodyTagSupport {
         return true;
     }
 
+    @Override
     public void release() {
         var = null;
         value = null;
@@ -189,8 +193,8 @@ public class UrlTag extends BodyTagSupport {
      * A URL query parameter.
      */
     private static class Parameter {
-        private String name;
-        private String value;
+        private final String name;
+        private final String value;
 
         private Parameter(String name, String value) {
             this.name = name;

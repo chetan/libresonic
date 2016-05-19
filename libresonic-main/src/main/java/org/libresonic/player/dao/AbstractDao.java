@@ -24,10 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-
-import org.libresonic.player.Logger;
 
 /**
  * Abstract superclass for all DAO's.
@@ -35,8 +34,10 @@ import org.libresonic.player.Logger;
  * @author Sindre Mehus
  */
 public class AbstractDao {
-    private static final Logger LOG = Logger.getLogger(AbstractDao.class);
-    
+
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(AbstractDao.class);
+
     private DaoHelper daoHelper;
 
     /**

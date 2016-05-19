@@ -19,18 +19,17 @@
  */
 package org.libresonic.player.service.metadata;
 
-import org.libresonic.player.Logger;
+import java.io.File;
+import java.io.InputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FilenameUtils;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.io.InputStreamReaderThread;
 import org.libresonic.player.service.ServiceLocator;
 import org.libresonic.player.service.TranscodingService;
 import org.libresonic.player.util.StringUtil;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.File;
-import java.io.InputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Parses meta data from video files using FFmpeg (http://ffmpeg.org/).
@@ -41,7 +40,9 @@ import java.util.regex.Pattern;
  */
 public class FFmpegParser extends MetaDataParser {
 
-    private static final Logger LOG = Logger.getLogger(FFmpegParser.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(FFmpegParser.class);
+
     private static final Pattern DURATION_PATTERN = Pattern.compile("Duration: (\\d+):(\\d+):(\\d+).(\\d+)");
     private static final Pattern BITRATE_PATTERN = Pattern.compile("bitrate: (\\d+) kb/s");
     private static final Pattern DIMENSION_PATTERN = Pattern.compile("Video.*?, (\\d+)x(\\d+)");

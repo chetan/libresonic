@@ -30,8 +30,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.service.MediaFileService;
 import org.libresonic.player.service.SecurityService;
@@ -46,7 +44,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class CoverArtService {
 
-    private static final Logger LOG = Logger.getLogger(CoverArtService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(CoverArtService.class);
 
     private SecurityService securityService;
     private MediaFileService mediaFileService;

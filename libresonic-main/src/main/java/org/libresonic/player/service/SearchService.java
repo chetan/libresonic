@@ -19,6 +19,10 @@
  */
 package org.libresonic.player.service;
 
+import static org.libresonic.player.service.SearchService.IndexType.*;
+
+import com.google.common.collect.Lists;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -61,10 +65,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
-
-import com.google.common.collect.Lists;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.AlbumDao;
 import org.libresonic.player.dao.ArtistDao;
 import org.libresonic.player.domain.Album;
@@ -76,8 +76,6 @@ import org.libresonic.player.domain.SearchCriteria;
 import org.libresonic.player.domain.SearchResult;
 import org.libresonic.player.util.FileUtil;
 
-import static org.libresonic.player.service.SearchService.IndexType.*;
-
 /**
  * Performs Lucene-based searching and indexing.
  *
@@ -87,7 +85,8 @@ import static org.libresonic.player.service.SearchService.IndexType.*;
  */
 public class SearchService {
 
-    private static final Logger LOG = Logger.getLogger(SearchService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(SearchService.class);
 
     private static final String FIELD_ID = "id";
     private static final String FIELD_TITLE = "title";

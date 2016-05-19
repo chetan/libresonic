@@ -23,10 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.InternetRadio;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 
 /**
  * Provides database services for internet radio.
@@ -35,7 +33,9 @@ import org.libresonic.player.domain.InternetRadio;
  */
 public class InternetRadioDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(InternetRadioDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(InternetRadioDao.class);
+
     private static final String COLUMNS = "id, name, stream_url, homepage_url, enabled, changed";
     private final InternetRadioRowMapper rowMapper = new InternetRadioRowMapper();
 
@@ -82,6 +82,7 @@ public class InternetRadioDao extends AbstractDao {
     }
 
     private static class InternetRadioRowMapper implements ParameterizedRowMapper<InternetRadio> {
+        @Override
         public InternetRadio mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new InternetRadio(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getTimestamp(6));
         }

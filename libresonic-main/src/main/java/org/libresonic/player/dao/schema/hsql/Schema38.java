@@ -19,9 +19,7 @@
  */
 package org.libresonic.player.dao.schema.hsql;
 
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.schema.Schema;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -32,7 +30,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class Schema38 extends Schema {
 
-    private static final Logger LOG = Logger.getLogger(Schema38.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Schema38.class);
 
     @Override
     public void execute(JdbcTemplate template) {

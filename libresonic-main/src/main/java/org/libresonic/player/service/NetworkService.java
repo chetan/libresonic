@@ -28,7 +28,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -42,8 +41,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.UrlRedirectType;
 import org.libresonic.player.service.upnp.ClingRouter;
 import org.libresonic.player.service.upnp.NATPMPRouter;
@@ -58,7 +55,9 @@ import org.libresonic.player.util.StringUtil;
  */
 public class NetworkService {
 
-    private static final Logger LOG = Logger.getLogger(NetworkService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(NetworkService.class);
+
     private static final long PORT_FORWARDING_DELAY = 3600L;
     private static final long URL_REDIRECTION_DELAY = 2 * 3600L;
 
@@ -313,6 +312,7 @@ public class NetworkService {
     }
 
     private abstract class Task implements Runnable {
+        @Override
         public void run() {
             String name = getClass().getSimpleName();
             try {

@@ -23,15 +23,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.AlbumListType;
 import org.libresonic.player.domain.AvatarScheme;
 import org.libresonic.player.domain.TranscodeScheme;
 import org.libresonic.player.domain.User;
 import org.libresonic.player.domain.UserSettings;
 import org.libresonic.player.util.StringUtil;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 
 /**
  * Provides user-related database services.
@@ -40,7 +38,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class UserDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(UserDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(UserDao.class);
+
     private static final String USER_COLUMNS = "username, password, email, ldap_authenticated, bytes_streamed, bytes_downloaded, bytes_uploaded";
     private static final String USER_SETTINGS_COLUMNS = "username, locale, theme_id, final_version_notification, beta_version_notification, " +
             "song_notification, main_track_number, main_artist, main_album, main_genre, " +
@@ -63,8 +62,8 @@ public class UserDao extends AbstractDao {
     private static final Integer ROLE_ID_JUKEBOX = 10;
     private static final Integer ROLE_ID_SHARE = 11;
 
-    private UserRowMapper userRowMapper = new UserRowMapper();
-    private UserSettingsRowMapper userSettingsRowMapper = new UserSettingsRowMapper();
+    private final UserRowMapper userRowMapper = new UserRowMapper();
+    private final UserSettingsRowMapper userSettingsRowMapper = new UserSettingsRowMapper();
 
     /**
      * Returns the user with the given username.
@@ -297,6 +296,7 @@ public class UserDao extends AbstractDao {
     }
 
     private class UserRowMapper implements ParameterizedRowMapper<User> {
+        @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User user = new User(rs.getString(1), decrypt(rs.getString(2)), rs.getString(3), rs.getBoolean(4),
                                  rs.getLong(5), rs.getLong(6), rs.getLong(7));
@@ -306,6 +306,7 @@ public class UserDao extends AbstractDao {
     }
 
     private static class UserSettingsRowMapper implements ParameterizedRowMapper<UserSettings> {
+        @Override
         public UserSettings mapRow(ResultSet rs, int rowNum) throws SQLException {
             int col = 1;
             UserSettings settings = new UserSettings(rs.getString(col++));

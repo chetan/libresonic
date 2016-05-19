@@ -19,6 +19,8 @@
  */
 package org.libresonic.player.service;
 
+import static org.libresonic.player.domain.MediaFile.MediaType.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,10 +37,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.AlbumDao;
 import org.libresonic.player.dao.MediaFileDao;
 import org.libresonic.player.domain.Album;
@@ -52,7 +50,8 @@ import org.libresonic.player.service.metadata.MetaDataParser;
 import org.libresonic.player.service.metadata.MetaDataParserFactory;
 import org.libresonic.player.util.FileUtil;
 
-import static org.libresonic.player.domain.MediaFile.MediaType.*;
+import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 
 /**
  * Provides services for instantiating and caching media files and cover art.
@@ -61,7 +60,8 @@ import static org.libresonic.player.domain.MediaFile.MediaType.*;
  */
 public class MediaFileService {
 
-    private static final Logger LOG = Logger.getLogger(MediaFileService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(MediaFileService.class);
 
     private Ehcache mediaFileMemoryCache;
     private SecurityService securityService;

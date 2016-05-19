@@ -1,0 +1,43 @@
+Configuration:
+  packages: org.libresonic.player.util
+  status: warn
+
+  Appenders:
+    RollingFile:
+      name: RollingFile
+      fileName: ${libresonic.home}/libresonic.log
+      filePattern: ${libresonic.home}/libresonic-%d{MM-dd-yy-HH-mm-ss}-%i.log.gz
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: 10 MB
+      DefaultRollOverStrategy:
+        max: 30
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"
+    ListAppender:
+      name: ListAppender
+      size: 50
+      PatternLayout:
+        Pattern: "%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"
+
+  Loggers:
+    Logger:
+      - name: org.libresonic
+        level: info
+        additivity: false
+        AppenderRef:
+          - ref: RollingFile
+          - ref: Console
+          - ref: ListAppender
+      
+    Root:
+      level: warn
+      AppenderRef:
+        - ref: RollingFile
+        - ref: Console
+        - ref: ListAppender

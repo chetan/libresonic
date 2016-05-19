@@ -19,15 +19,13 @@
  */
 package org.libresonic.player.dao.schema.hsql;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.dao.schema.Schema;
-
-import org.apache.commons.io.IOUtils;
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+
+import org.apache.commons.io.IOUtils;
+import org.libresonic.player.dao.schema.Schema;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Used for creating and evolving the database schema.
@@ -37,7 +35,7 @@ import java.util.Date;
  */
 public class Schema35 extends Schema {
 
-    private static final Logger LOG = Logger.getLogger(Schema35.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Schema35.class);
 
     private static final String[] AVATARS = {
             "Formal", "Engineer", "Footballer", "Green-Boy",

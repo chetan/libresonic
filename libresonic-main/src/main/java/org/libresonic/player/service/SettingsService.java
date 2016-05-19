@@ -43,14 +43,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.AvatarDao;
 import org.libresonic.player.dao.InternetRadioDao;
 import org.libresonic.player.dao.MusicFolderDao;
@@ -233,9 +225,10 @@ public class SettingsService {
     private static final String LOCALES_FILE = "/org/libresonic/player/i18n/locales.txt";
     private static final String THEMES_FILE = "/org/libresonic/player/theme/themes.txt";
 
-    private static final Logger LOG = Logger.getLogger(SettingsService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(SettingsService.class);
 
-    private Properties properties = new Properties();
+    private final Properties properties = new Properties();
     private List<Theme> themes;
     private List<Locale> locales;
     private InternetRadioDao internetRadioDao;
@@ -1420,6 +1413,7 @@ public class SettingsService {
             licenseValidationFuture.cancel(true);
         }
         Runnable task = new Runnable() {
+            @Override
             public void run() {
                 validateLicense();
             }
@@ -1432,6 +1426,7 @@ public class SettingsService {
 
     private void scheduleLocalIpAddressLookup() {
         Runnable task = new Runnable() {
+            @Override
             public void run() {
                 localIpAddress = Util.getLocalIpAddress();
             }

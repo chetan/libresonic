@@ -19,9 +19,7 @@
  */
 package org.libresonic.player.dao.schema.hsql;
 
-import org.libresonic.player.Logger;
 import org.libresonic.player.dao.schema.Schema;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -32,8 +30,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
  */
 public class Schema34 extends Schema {
 
-    private static final Logger LOG = Logger.getLogger(Schema34.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(Schema34.class);
 
+    @Override
     public void execute(JdbcTemplate template) {
 
         if (template.queryForInt("select count(*) from version where version = 10") == 0) {

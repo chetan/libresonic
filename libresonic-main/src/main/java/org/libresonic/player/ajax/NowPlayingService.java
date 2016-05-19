@@ -19,7 +19,6 @@
  */
 package org.libresonic.player.ajax;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.directwebremoting.WebContext;
 import org.directwebremoting.WebContextFactory;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.AvatarScheme;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.PlayStatus;
@@ -50,7 +47,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class NowPlayingService {
 
-    private static final Logger LOG = Logger.getLogger(NowPlayingService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(NowPlayingService.class);
 
     private PlayerService playerService;
     private StatusService statusService;

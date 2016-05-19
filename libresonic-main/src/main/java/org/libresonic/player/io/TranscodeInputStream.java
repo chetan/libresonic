@@ -19,11 +19,12 @@
  */
 package org.libresonic.player.io;
 
-import org.libresonic.player.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import org.apache.commons.io.*;
-
-import java.io.*;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Subclass of {@link InputStream} which provides on-the-fly transcoding.
@@ -34,11 +35,12 @@ import java.io.*;
  */
 public class TranscodeInputStream extends InputStream {
 
-    private static final Logger LOG = Logger.getLogger(TranscodeInputStream.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(TranscodeInputStream.class);
 
-    private InputStream processInputStream;
-    private OutputStream processOutputStream;
-    private Process process;
+    private final InputStream processInputStream;
+    private final OutputStream processOutputStream;
+    private final Process process;
     private final File tmpFile;
 
     /**
@@ -57,7 +59,7 @@ public class TranscodeInputStream extends InputStream {
         for (String s : processBuilder.command()) {
             buf.append('[').append(s).append("] ");
         }
-        LOG.info(buf);
+        LOG.info(buf.toString());
 
         process = processBuilder.start();
         processOutputStream = process.getOutputStream();
@@ -70,6 +72,7 @@ public class TranscodeInputStream extends InputStream {
         // Copy data in a separate thread
         if (in != null) {
             new Thread(name + " TranscodedInputStream copy thread") {
+                @Override
                 public void run() {
                     try {
                         IOUtils.copy(in, processOutputStream);
@@ -87,6 +90,7 @@ public class TranscodeInputStream extends InputStream {
     /**
      * @see InputStream#read()
      */
+    @Override
     public int read() throws IOException {
         return processInputStream.read();
     }
@@ -94,6 +98,7 @@ public class TranscodeInputStream extends InputStream {
     /**
      * @see InputStream#read(byte[])
      */
+    @Override
     public int read(byte[] b) throws IOException {
         return processInputStream.read(b);
     }
@@ -101,6 +106,7 @@ public class TranscodeInputStream extends InputStream {
     /**
      * @see InputStream#read(byte[], int, int)
      */
+    @Override
     public int read(byte[] b, int off, int len) throws IOException {
         return processInputStream.read(b, off, len);
     }
@@ -108,6 +114,7 @@ public class TranscodeInputStream extends InputStream {
     /**
      * @see InputStream#close()
      */
+    @Override
     public void close() throws IOException {
         IOUtils.closeQuietly(processInputStream);
         IOUtils.closeQuietly(processOutputStream);

@@ -19,21 +19,36 @@
  */
 package org.libresonic.player.controller;
 
-import org.libresonic.player.*;
-import org.libresonic.player.domain.*;
-import org.libresonic.player.upload.*;
-import org.libresonic.player.service.*;
-import org.libresonic.player.util.*;
-import org.apache.commons.fileupload.*;
-import org.apache.commons.fileupload.servlet.*;
-import org.apache.commons.io.*;
-import org.apache.tools.zip.*;
-import org.springframework.web.servlet.*;
-import org.springframework.web.servlet.mvc.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import javax.servlet.http.*;
-import java.io.*;
-import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipFile;
+import org.libresonic.player.domain.TransferStatus;
+import org.libresonic.player.domain.User;
+import org.libresonic.player.service.PlayerService;
+import org.libresonic.player.service.SecurityService;
+import org.libresonic.player.service.SettingsService;
+import org.libresonic.player.service.StatusService;
+import org.libresonic.player.upload.MonitoredDiskFileItemFactory;
+import org.libresonic.player.upload.UploadListener;
+import org.libresonic.player.util.StringUtil;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.ParameterizableViewController;
 
 /**
  * Controller which receives uploaded files.
@@ -42,7 +57,8 @@ import java.util.*;
  */
 public class UploadController extends ParameterizableViewController {
 
-    private static final Logger LOG = Logger.getLogger(UploadController.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(UploadController.class);
 
     private SecurityService securityService;
     private PlayerService playerService;
@@ -216,18 +232,20 @@ public class UploadController extends ParameterizableViewController {
      * Receives callbacks as the file upload progresses.
      */
     private class UploadListenerImpl implements UploadListener {
-        private TransferStatus status;
-        private long start;
+        private final TransferStatus status;
+        private final long start;
 
         private UploadListenerImpl(TransferStatus status) {
             this.status = status;
             start = System.currentTimeMillis();
         }
 
+        @Override
         public void start(String fileName) {
             status.setFile(new File(fileName));
         }
 
+        @Override
         public void bytesRead(long bytesRead) {
 
             // Throttle bitrate.

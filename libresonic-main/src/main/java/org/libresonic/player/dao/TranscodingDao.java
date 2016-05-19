@@ -23,10 +23,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.Transcoding;
+import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 
 /**
  * Provides database services for transcoding configurations.
@@ -35,9 +33,11 @@ import org.libresonic.player.domain.Transcoding;
  */
 public class TranscodingDao extends AbstractDao {
 
-    private static final Logger LOG = Logger.getLogger(TranscodingDao.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(TranscodingDao.class);
+
     private static final String COLUMNS = "id, name, source_formats, target_format, step1, step2, step3, default_active";
-    private TranscodingRowMapper rowMapper = new TranscodingRowMapper();
+    private final TranscodingRowMapper rowMapper = new TranscodingRowMapper();
 
     /**
      * Returns all transcodings.
@@ -116,6 +116,7 @@ public class TranscodingDao extends AbstractDao {
     }
 
     private static class TranscodingRowMapper implements ParameterizedRowMapper<Transcoding> {
+        @Override
         public Transcoding mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Transcoding(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),
                     rs.getString(6), rs.getString(7), rs.getBoolean(8));

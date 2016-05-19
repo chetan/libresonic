@@ -34,8 +34,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.Namespace;
 import org.jdom.input.SAXBuilder;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.util.StringUtil;
 
 /**
@@ -49,7 +47,8 @@ import org.libresonic.player.util.StringUtil;
  */
 public class LyricsService {
 
-    private static final Logger LOG = Logger.getLogger(LyricsService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(LyricsService.class);
 
     /**
      * Returns lyrics for the given song and artist.

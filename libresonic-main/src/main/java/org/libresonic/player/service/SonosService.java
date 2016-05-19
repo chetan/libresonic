@@ -19,37 +19,6 @@
 
 package org.libresonic.player.service;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.ws.Holder;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.handler.MessageContext;
-
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.cxf.headers.Header;
-import org.apache.cxf.helpers.CastUtils;
-import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.apache.cxf.jaxws.context.WrappedMessageContext;
-import org.apache.cxf.message.Message;
-import org.w3c.dom.Node;
-
 import com.sonos.services._1.AbstractMedia;
 import com.sonos.services._1.AddToContainerResult;
 import com.sonos.services._1.ContentKey;
@@ -87,7 +56,35 @@ import com.sonos.services._1.SearchResponse;
 import com.sonos.services._1.SegmentMetadataList;
 import com.sonos.services._1_1.SonosSoap;
 
-import org.libresonic.player.Logger;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.Holder;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.cxf.headers.Header;
+import org.apache.cxf.helpers.CastUtils;
+import org.apache.cxf.jaxb.JAXBDataBinding;
+import org.apache.cxf.jaxws.context.WrappedMessageContext;
+import org.apache.cxf.message.Message;
 import org.libresonic.player.domain.AlbumListType;
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.Playlist;
@@ -95,6 +92,7 @@ import org.libresonic.player.domain.User;
 import org.libresonic.player.service.sonos.SonosHelper;
 import org.libresonic.player.service.sonos.SonosServiceRegistration;
 import org.libresonic.player.service.sonos.SonosSoapFault;
+import org.w3c.dom.Node;
 
 /**
  * For manual testing of this service:
@@ -105,7 +103,8 @@ import org.libresonic.player.service.sonos.SonosSoapFault;
  */
 public class SonosService implements SonosSoap {
 
-    private static final Logger LOG = Logger.getLogger(SonosService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(SonosService.class);
 
     public static final String ID_ROOT = "root";
     public static final String ID_SHUFFLE = "shuffle";

@@ -19,8 +19,6 @@
 
 package org.libresonic.player.security;
 
-import org.libresonic.player.Logger;
-
 /**
  * Logs login failures. Can be used by tools like fail2ban for blocking IP addresses.
  *
@@ -29,7 +27,8 @@ import org.libresonic.player.Logger;
  */
 public class LoginFailureLogger {
 
-    private static final Logger LOG = Logger.getLogger(LoginFailureLogger.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(LoginFailureLogger.class);
 
     public void log(String remoteAddress, String username) {
         LOG.info("Login failed for [" + username + "] from [" + remoteAddress + "]");

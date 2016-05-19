@@ -44,8 +44,6 @@ import org.fourthline.cling.support.connectionmanager.ConnectionManagerService;
 import org.fourthline.cling.support.model.ProtocolInfos;
 import org.fourthline.cling.support.model.dlna.DLNAProfiles;
 import org.fourthline.cling.support.model.dlna.DLNAProtocolInfo;
-
-import org.libresonic.player.Logger;
 import org.libresonic.player.domain.Version;
 import org.libresonic.player.service.upnp.ApacheUpnpServiceConfiguration;
 import org.libresonic.player.service.upnp.FolderBasedContentDirectory;
@@ -57,7 +55,8 @@ import org.libresonic.player.service.upnp.MSMediaReceiverRegistrarService;
  */
 public class UPnPService {
 
-    private static final Logger LOG = Logger.getLogger(UPnPService.class);
+    private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory
+            .getLogger(UPnPService.class);
 
     private SettingsService settingsService;
     private VersionService versionService;
@@ -70,6 +69,7 @@ public class UPnPService {
 
     public void startService() {
         Runnable runnable = new Runnable() {
+            @Override
             public void run() {
                 try {
                     LOG.info("Starting UPnP service...");
