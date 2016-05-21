@@ -34,10 +34,9 @@ Configuration:
           - ref: RollingFile
           - ref: Console
           - ref: ListAppender
-      
+
     Root:
       level: warn
       AppenderRef:
         - ref: RollingFile
         - ref: Console
-        - ref: ListAppender

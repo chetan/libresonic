@@ -17,6 +17,8 @@ import org.apache.logging.log4j.core.config.plugins.PluginAttribute;
 import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.PluginFactory;
 import org.apache.logging.log4j.core.layout.PatternLayout;
+import org.apache.logging.log4j.core.util.Booleans;
+import org.apache.logging.log4j.core.util.Integers;
 
 public class HelpUtil {
 
@@ -25,14 +27,10 @@ public class HelpUtil {
 
         private final BoundedList<String> events;
 
-        protected ListAppender(String name, Filter filter, Layout<? extends Serializable> layout) {
-            super(name, filter, layout, true);
-            this.events = new BoundedList<>(50);
-        }
-
-        public ListAppender(String name, Filter filter, Layout<? extends Serializable> layout,
-                boolean b) {
-            this(name, filter, layout);
+        private ListAppender(int listSize, String name, Filter filter, Layout<? extends Serializable> layout,
+                boolean ignoreExceptions) {
+            super(name, filter, layout, ignoreExceptions);
+            this.events = new BoundedList<>(listSize);
         }
 
         @Override
@@ -48,10 +46,11 @@ public class HelpUtil {
 
         @PluginFactory
         public static ListAppender createAppender(
+                @PluginAttribute("size") final String size,
                 @PluginAttribute("name") String name,
                 @PluginElement("Layout") Layout<? extends Serializable> layout,
                 @PluginElement("Filter") final Filter filter,
-                @PluginAttribute("otherAttribute") String otherAttribute) {
+                @PluginAttribute("ignoreExceptions") final String ignore) {
 
             if (name == null) {
                 LOGGER.error("No name provided for ListAppender");
@@ -62,7 +61,10 @@ public class HelpUtil {
                 layout = PatternLayout.createDefaultLayout();
             }
 
-            return new ListAppender(name, filter, layout, true);
+            final int listSize = Integers.parseInt(size, 50);
+            final boolean ignoreExceptions = Booleans.parseBoolean(ignore, true);
+
+            return new ListAppender(listSize, name, filter, layout, ignoreExceptions);
         }
 
     }

@@ -22,9 +22,8 @@ Configuration:
         AppenderRef:
           - ref: Console
           - ref: ListAppender
-      
+
     Root:
       level: warn
       AppenderRef:
         - ref: Console
-        - ref: ListAppender
