@@ -4,6 +4,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+    <!-- Small shim to setup the logging path correctly -->
+    <bean id="logSetup" class="org.libresonic.player.util.LogSetup" init-method="init" />
+
     <!-- DAO's -->
 
     <bean id="playerDao" class="org.libresonic.player.dao.PlayerDao">
