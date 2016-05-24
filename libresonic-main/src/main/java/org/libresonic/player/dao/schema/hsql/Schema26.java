@@ -19,10 +19,10 @@
  */
 package org.libresonic.player.dao.schema.hsql;
 
-import org.libresonic.player.*;
+import org.libresonic.player.Logger;
 import org.libresonic.player.dao.schema.Schema;
 import org.libresonic.player.util.Util;
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Used for creating and evolving the database schema.
@@ -33,9 +33,10 @@ import org.springframework.jdbc.core.*;
 public class Schema26 extends Schema {
     private static final Logger LOG = Logger.getLogger(Schema26.class);
 
+    @Override
     public void execute(JdbcTemplate template) {
 
-        if (template.queryForInt("select count(*) from version where version = 2") == 0) {
+        if (template.queryForObject("select count(*) from version where version = 2", Integer.class) == 0) {
             LOG.info("Updating database schema to version 2.");
             template.execute("insert into version values (2)");
         }
@@ -99,7 +100,7 @@ public class Schema26 extends Schema {
             LOG.info("Database column 'player.dynamic_ip' was added successfully.");
         }
 
-        if (template.queryForInt("select count(*) from role where id = 6") == 0) {
+        if (template.queryForObject("select count(*) from role where id = 6", Integer.class) == 0) {
             LOG.info("Role 'comment' not found in database. Creating it.");
             template.execute("insert into role values (6, 'comment')");
             template.execute("insert into user_role " +

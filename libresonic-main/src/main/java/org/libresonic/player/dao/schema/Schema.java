@@ -19,7 +19,7 @@
  */
 package org.libresonic.player.dao.schema;
 
-import org.springframework.jdbc.core.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * Used for creating and evolving the database schema.
@@ -68,7 +68,7 @@ public abstract class Schema {
 
     protected boolean rowExists(JdbcTemplate template, String whereClause, String table) {
         try {
-            int rowCount = template.queryForInt("select count(*) from " + table + " where " + whereClause);
+            int rowCount = template.queryForObject("select count(*) from " + table + " where " + whereClause, Integer.class);
             return rowCount > 0;
         } catch (Exception x) {
             return false;

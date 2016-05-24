@@ -21,7 +21,6 @@ package org.libresonic.player.dao.schema.hsql;
 
 import org.libresonic.player.Logger;
 import org.libresonic.player.dao.schema.Schema;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
@@ -33,9 +32,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class Schema32 extends Schema {
     private static final Logger LOG = Logger.getLogger(Schema32.class);
 
+    @Override
     public void execute(JdbcTemplate template) {
 
-        if (template.queryForInt("select count(*) from version where version = 8") == 0) {
+        if (template.queryForObject("select count(*) from version where version = 8", Integer.class) == 0) {
             LOG.info("Updating database schema to version 8.");
             template.execute("insert into version values (8)");
         }
@@ -83,7 +83,7 @@ public class Schema32 extends Schema {
             LOG.info("Database table 'podcast_episode' was created successfully.");
         }
 
-        if (template.queryForInt("select count(*) from role where id = 7") == 0) {
+        if (template.queryForObject("select count(*) from role where id = 7", Integer.class) == 0) {
             LOG.info("Role 'podcast' not found in database. Creating it.");
             template.execute("insert into role values (7, 'podcast')");
             template.execute("insert into user_role " +

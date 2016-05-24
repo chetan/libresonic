@@ -19,18 +19,16 @@
  */
 package org.libresonic.player.dao;
 
-import java.util.ArrayList;
+import static org.libresonic.player.domain.MediaFile.MediaType.*;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-
 import org.libresonic.player.domain.MediaFile;
 import org.libresonic.player.domain.MusicFolder;
-
-import static org.libresonic.player.domain.MediaFile.MediaType.ALBUM;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 /**
  * Provides database services for ratings.
@@ -92,7 +90,7 @@ public class RatingDao extends AbstractDao {
      */
     public Double getAverageRating(MediaFile mediaFile) {
         try {
-            return (Double) getJdbcTemplate().queryForObject("select avg(rating) from user_rating where path=?", new Object[]{mediaFile.getPath()}, Double.class);
+            return getJdbcTemplate().queryForObject("select avg(rating) from user_rating where path=?", new Object[]{mediaFile.getPath()}, Double.class);
         } catch (EmptyResultDataAccessException x) {
             return null;
         }
@@ -107,7 +105,7 @@ public class RatingDao extends AbstractDao {
      */
     public Integer getRatingForUser(String username, MediaFile mediaFile) {
         try {
-            return getJdbcTemplate().queryForInt("select rating from user_rating where username=? and path=?", new Object[]{username, mediaFile.getPath()});
+            return getJdbcTemplate().queryForObject("select rating from user_rating where username=? and path=?", new Object[]{username, mediaFile.getPath()}, Integer.class);
         } catch (EmptyResultDataAccessException x) {
             return null;
         }
