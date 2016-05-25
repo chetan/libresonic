@@ -54,7 +54,8 @@
 
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <dependency>
