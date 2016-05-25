@@ -19,9 +19,10 @@
  */
 package org.libresonic.player.controller;
 
+import org.apache.commons.lang.StringUtils;
 import org.libresonic.player.command.AdvancedSettingsCommand;
 import org.libresonic.player.service.SettingsService;
-import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,9 +35,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Sindre Mehus
  */
 @Controller
-@RequestMapping("advancedSettings")
+@RequestMapping("/advancedSettings.view")
 public class AdvancedSettingsController {
 
+    @Autowired
     private SettingsService settingsService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -99,7 +101,4 @@ public class AdvancedSettingsController {
         return "advancedSettings";
     }
 
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
 }

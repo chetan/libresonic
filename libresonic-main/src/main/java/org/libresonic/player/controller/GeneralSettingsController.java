@@ -21,18 +21,15 @@ package org.libresonic.player.controller;
 
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.libresonic.player.command.GeneralSettingsCommand;
+import org.libresonic.player.domain.Theme;
+import org.libresonic.player.service.SettingsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-
-import org.libresonic.player.command.GeneralSettingsCommand;
-import org.libresonic.player.domain.Theme;
-import org.libresonic.player.service.SettingsService;
 
 /**
  * Controller for the page used to administrate general settings.
@@ -40,9 +37,10 @@ import org.libresonic.player.service.SettingsService;
  * @author Sindre Mehus
  */
 @Controller
-@RequestMapping("generalSettings")
+@RequestMapping("/generalSettings.view")
 public class GeneralSettingsController {
 
+    @Autowired
     private SettingsService settingsService;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -90,7 +88,7 @@ public class GeneralSettingsController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String doSubmitAction(@ModelAttribute("commadn") GeneralSettingsCommand command) throws Exception {
+    public String doSubmitAction(@ModelAttribute("command") GeneralSettingsCommand command) throws Exception {
 
         int themeIndex = Integer.parseInt(command.getThemeIndex());
         Theme theme = settingsService.getAvailableThemes()[themeIndex];
@@ -124,7 +122,4 @@ public class GeneralSettingsController {
         return "generalSettings";
     }
 
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
 }

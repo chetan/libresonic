@@ -24,24 +24,32 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-
 import org.libresonic.player.command.PremiumSettingsCommand;
 import org.libresonic.player.service.SecurityService;
 import org.libresonic.player.service.SettingsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for the Subsonic Premium page.
  *
  * @author Sindre Mehus
  */
-public class PremiumSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("/premiumSettings.view")
+public class PremiumSettingsController {
 
+    @Autowired
     private SettingsService settingsService;
+
+    @Autowired
     private SecurityService securityService;
 
+    @RequestMapping(method = RequestMethod.GET)
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         PremiumSettingsCommand command = new PremiumSettingsCommand();
         command.setPath(request.getParameter("path"));
@@ -52,9 +60,10 @@ public class PremiumSettingsController extends SimpleFormController {
         return command;
     }
 
-    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object com, BindException errors)
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, PremiumSettingsCommand command, BindException errors)
             throws Exception {
-        PremiumSettingsCommand command = (PremiumSettingsCommand) com;
+
         Date now = new Date();
 
         settingsService.setLicenseCode(command.getLicenseCode());
@@ -67,14 +76,7 @@ public class PremiumSettingsController extends SimpleFormController {
         command.setLicenseInfo(settingsService.getLicenseInfo());
         command.setToast(true);
 
-        return new ModelAndView(getSuccessView(), errors.getModel());
+        return new ModelAndView("premiumSettings", errors.getModel());
     }
 
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
-
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

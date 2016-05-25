@@ -25,10 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.validation.BindException;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-
 import org.libresonic.player.command.SearchCommand;
 import org.libresonic.player.domain.MusicFolder;
 import org.libresonic.player.domain.SearchCriteria;
@@ -39,30 +35,44 @@ import org.libresonic.player.service.PlayerService;
 import org.libresonic.player.service.SearchService;
 import org.libresonic.player.service.SecurityService;
 import org.libresonic.player.service.SettingsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Controller for the search page.
  *
  * @author Sindre Mehus
  */
-public class SearchController extends SimpleFormController {
+@Controller
+@RequestMapping("/search.view")
+public class SearchController {
 
     private static final int MATCH_COUNT = 25;
 
+    @Autowired
     private SecurityService securityService;
+
+    @Autowired
     private SettingsService settingsService;
+
+    @Autowired
     private PlayerService playerService;
+
+    @Autowired
     private SearchService searchService;
 
-    @Override
+    @RequestMapping(method = RequestMethod.GET)
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         return new SearchCommand();
     }
 
-    @Override
-    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, Object com, BindException errors)
+    @RequestMapping(method = RequestMethod.POST)
+    protected ModelAndView onSubmit(HttpServletRequest request, HttpServletResponse response, SearchCommand command, BindException errors)
             throws Exception {
-        SearchCommand command = (SearchCommand) com;
 
         User user = securityService.getCurrentUser(request);
         UserSettings userSettings = settingsService.getUserSettings(user.getUsername());
@@ -90,22 +100,7 @@ public class SearchController extends SimpleFormController {
             command.setPlayer(playerService.getPlayer(request, response));
         }
 
-        return new ModelAndView(getSuccessView(), errors.getModel());
+        return new ModelAndView("search", errors.getModel());
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
-
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
-    }
-
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
-    }
 }

@@ -25,8 +25,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-
 import org.libresonic.player.command.PlayerSettingsCommand;
 import org.libresonic.player.domain.Player;
 import org.libresonic.player.domain.PlayerTechnology;
@@ -36,19 +34,30 @@ import org.libresonic.player.domain.User;
 import org.libresonic.player.service.PlayerService;
 import org.libresonic.player.service.SecurityService;
 import org.libresonic.player.service.TranscodingService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller for the player settings page.
  *
  * @author Sindre Mehus
  */
-public class PlayerSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("/playerSettings.view")
+public class PlayerSettingsController {
 
+    @Autowired
     private PlayerService playerService;
+
+    @Autowired
     private SecurityService securityService;
+
+    @Autowired
     private TranscodingService transcodingService;
 
-    @Override
+    @RequestMapping(method = RequestMethod.GET)
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
 
         handleRequestParameters(request);
@@ -93,9 +102,8 @@ public class PlayerSettingsController extends SimpleFormController {
         return command;
     }
 
-    @Override
-    protected void doSubmitAction(Object comm) throws Exception {
-        PlayerSettingsCommand command = (PlayerSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected void doSubmitAction(PlayerSettingsCommand command) throws Exception {
         Player player = playerService.getPlayerById(command.getPlayerId());
 
         player.setAutoControlEnabled(command.isAutoControlEnabled());
@@ -133,15 +141,4 @@ public class PlayerSettingsController extends SimpleFormController {
         }
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
-
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
-    }
-
-    public void setTranscodingService(TranscodingService transcodingService) {
-        this.transcodingService = transcodingService;
-    }
 }

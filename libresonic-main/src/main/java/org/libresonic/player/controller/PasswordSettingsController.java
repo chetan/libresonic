@@ -19,22 +19,29 @@
  */
 package org.libresonic.player.controller;
 
-import org.springframework.web.servlet.mvc.*;
-import org.libresonic.player.service.*;
-import org.libresonic.player.command.*;
-import org.libresonic.player.domain.*;
+import javax.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.*;
+import org.libresonic.player.command.PasswordSettingsCommand;
+import org.libresonic.player.domain.User;
+import org.libresonic.player.service.SecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller for the page used to change password.
  *
  * @author Sindre Mehus
  */
-public class PasswordSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("/passwordSettings.view")
+public class PasswordSettingsController {
 
+    @Autowired
     private SecurityService securityService;
 
+    @RequestMapping(method = RequestMethod.GET)
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         PasswordSettingsCommand command = new PasswordSettingsCommand();
         User user = securityService.getCurrentUser(request);
@@ -43,8 +50,8 @@ public class PasswordSettingsController extends SimpleFormController {
         return command;
     }
 
-    protected void doSubmitAction(Object comm) throws Exception {
-        PasswordSettingsCommand command = (PasswordSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected void doSubmitAction(PasswordSettingsCommand command) throws Exception {
         User user = securityService.getUserByName(command.getUsername());
         user.setPassword(command.getPassword());
         securityService.updateUser(user);
@@ -54,7 +61,4 @@ public class PasswordSettingsController extends SimpleFormController {
         command.setToast(true);
     }
 
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
-    }
 }

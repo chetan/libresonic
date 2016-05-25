@@ -19,25 +19,6 @@
  */
 package org.libresonic.player.controller;
 
-import org.libresonic.player.Logger;
-import org.libresonic.player.domain.Avatar;
-import org.libresonic.player.service.SecurityService;
-import org.libresonic.player.service.SettingsService;
-import org.libresonic.player.util.StringUtil;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -46,6 +27,27 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.libresonic.player.Logger;
+import org.libresonic.player.domain.Avatar;
+import org.libresonic.player.service.SecurityService;
+import org.libresonic.player.service.SettingsService;
+import org.libresonic.player.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller which receives uploaded avatar images.
@@ -59,7 +61,10 @@ public class AvatarUploadController {
     private static final Logger LOG = Logger.getLogger(AvatarUploadController.class);
     private static final int MAX_AVATAR_SIZE = 64;
 
+    @Autowired
     private SettingsService settingsService;
+
+    @Autowired
     private SecurityService securityService;
 
     @RequestMapping(method = RequestMethod.POST)
@@ -133,13 +138,5 @@ public class AvatarUploadController {
             LOG.warn("Failed to upload personal image: " + x, x);
             map.put("error", x);
         }
-    }
-
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
-
-    public void setSecurityService(SecurityService securityService) {
-        this.securityService = securityService;
     }
 }

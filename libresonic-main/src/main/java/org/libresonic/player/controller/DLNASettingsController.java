@@ -22,19 +22,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.libresonic.player.service.SettingsService;
+import org.libresonic.player.service.UPnPService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.ParameterizableViewController;
-
-import org.libresonic.player.service.SettingsService;
-import org.libresonic.player.service.UPnPService;
 
 /**
  * Controller for the page used to administrate the UPnP/DLNA server settings.
@@ -45,7 +42,10 @@ import org.libresonic.player.service.UPnPService;
 @RequestMapping("dlnaSettings")
 public class DLNASettingsController {
 
+    @Autowired
     private UPnPService upnpService;
+
+    @Autowired
     private SettingsService settingsService;
 
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
@@ -90,11 +90,4 @@ public class DLNASettingsController {
         upnpService.setMediaServerEnabled(dlnaEnabled);
     }
 
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
-
-    public void setUpnpService(UPnPService upnpService) {
-        this.upnpService = upnpService;
-    }
 }

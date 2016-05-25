@@ -19,23 +19,32 @@
  */
 package org.libresonic.player.controller;
 
-import org.springframework.web.servlet.mvc.SimpleFormController;
-import org.libresonic.player.service.SettingsService;
-import org.libresonic.player.service.PodcastService;
-import org.libresonic.player.command.PodcastSettingsCommand;
-
 import javax.servlet.http.HttpServletRequest;
+
+import org.libresonic.player.command.PodcastSettingsCommand;
+import org.libresonic.player.service.PodcastService;
+import org.libresonic.player.service.SettingsService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Controller for the page used to administrate the Podcast receiver.
  *
  * @author Sindre Mehus
  */
-public class PodcastSettingsController extends SimpleFormController {
+@Controller
+@RequestMapping("/podcastSettings.view")
+public class PodcastSettingsController {
 
+    @Autowired
     private SettingsService settingsService;
+
+    @Autowired
     private PodcastService podcastService;
 
+    @RequestMapping(method = RequestMethod.GET)
     protected Object formBackingObject(HttpServletRequest request) throws Exception {
         PodcastSettingsCommand command = new PodcastSettingsCommand();
 
@@ -46,8 +55,8 @@ public class PodcastSettingsController extends SimpleFormController {
         return command;
     }
 
-    protected void doSubmitAction(Object comm) throws Exception {
-        PodcastSettingsCommand command = (PodcastSettingsCommand) comm;
+    @RequestMapping(method = RequestMethod.POST)
+    protected void doSubmitAction(PodcastSettingsCommand command) throws Exception {
         command.setToast(true);
 
         settingsService.setPodcastUpdateInterval(Integer.parseInt(command.getInterval()));
@@ -59,11 +68,4 @@ public class PodcastSettingsController extends SimpleFormController {
         podcastService.schedule();
     }
 
-    public void setSettingsService(SettingsService settingsService) {
-        this.settingsService = settingsService;
-    }
-
-    public void setPodcastService(PodcastService podcastService) {
-        this.podcastService = podcastService;
-    }
 }

@@ -19,22 +19,21 @@
  */
 package org.libresonic.player.controller;
 
-import org.libresonic.player.dao.DaoHelper;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.libresonic.player.dao.DaoHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.ParameterizableViewController;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Controller for the DB admin page.
@@ -45,6 +44,7 @@ import java.util.Map;
 @RequestMapping("db")
 public class DBController {
 
+    @Autowired
     private DaoHelper daoHelper;
 
     @RequestMapping(method = RequestMethod.GET)
@@ -67,7 +67,4 @@ public class DBController {
         return "db";
     }
 
-    public void setDaoHelper(DaoHelper daoHelper) {
-        this.daoHelper = daoHelper;
-    }
 }

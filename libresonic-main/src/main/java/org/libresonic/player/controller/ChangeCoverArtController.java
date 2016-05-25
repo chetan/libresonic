@@ -23,18 +23,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.libresonic.player.domain.MediaFile;
+import org.libresonic.player.service.MediaFileService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.ParameterizableViewController;
-
-import org.libresonic.player.domain.MediaFile;
-import org.libresonic.player.service.MediaFileService;
 
 /**
  * Controller for changing cover art.
@@ -72,7 +68,4 @@ public class ChangeCoverArtController {
         return "changeCoverArt";
     }
 
-    public void setMediaFileService(MediaFileService mediaFileService) {
-        this.mediaFileService = mediaFileService;
-    }
 }
